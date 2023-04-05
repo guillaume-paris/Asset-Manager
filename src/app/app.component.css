@@ -1,0 +1,17 @@
+.navbar {
+    background-color: #dbdbdb;
+}
+
+.nav-item:hover {
+    background: #b5b5b5;
+    border-radius: 7px;
+}
+
+.dropdown-item {
+    cursor: pointer;
+}
+
+.dropdown-menu-right {
+    right: 0;
+    left: auto;
+}

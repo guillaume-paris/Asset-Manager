@@ -1,0 +1,118 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/">Asset Management Project</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item pb-1 px-1">
+          <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+        </li>
+        <li class="nav-item pb-1 px-1" *ngIf="isLoggedIn">
+          <a class="nav-link" routerLink="/user" routerLinkActive="active">User</a>
+        </li>
+        <li class="nav-item pb-1 px-1" *ngIf="isLoggedIn">
+          <a class="nav-link" routerLink="/asset" routerLinkActive="active">Asset</a>
+        </li>
+        <li class="nav-item pb-1 px-1" *ngIf="isLoggedIn">
+          <a class="nav-link" routerLink="/asset-management" routerLinkActive="active">Asset management</a>
+        </li>
+        
+      </ul>
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ username ? username : "Account" }}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
+            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#registerModal">Register</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="loginModalLabel">Login</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="password" class="form-label">Email address</label>
+          <input type="email" class="form-control" id="email">
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Login</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Register  Modal -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="registerModalLabel">Register</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form [formGroup]="registerForm" (ngSubmit)="register()">
+      <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-control" formControlName="username">
+            <div *ngIf="registerForm.get('username')?.touched && registerForm.get('username')?.value === ''" class="text-danger">
+              <small class="text-danger">Please enter a username</small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email address</label>
+            <input type="text" class="form-control" formControlName="email">
+            <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.value === ''" class="text-danger">
+              <small class="text-danger">Please enter an email adress</small>
+            </div>
+            <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['email']" class="text-danger">
+              <small class="text-danger">Please enter a valid email adress</small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-control" formControlName="password">
+            <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.value === ''" class="text-danger">
+              <small class="text-danger">Please enter a password</small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Confirm Password</label>
+            <input type="password" class="form-control" formControlName="confirmPassword">
+            <div *ngIf="registerForm.hasError('passwordMatch') && registerForm.get('confirmPassword')?.touched" class="text-danger">
+              <small class="text-danger">Please enter the same password</small>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button class="btn btn-primary" type="submit">Register</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<router-outlet></router-outlet>
