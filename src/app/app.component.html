@@ -27,10 +27,9 @@
             {{ username ? username : "Account" }}
           </a>
           <ul class="dropdown-menu dropdown-menu-right">
-            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
-            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#registerModal">Register</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item">Logout</a></li>
+            <li><a class="dropdown-item" (click)="openModal(loginModal)" *ngIf="!isLoggedIn">Login</a></li>
+            <li><a class="dropdown-item" (click)="openModal(registerModal)" *ngIf="!isLoggedIn">Register</a></li>
+            <li><a class="dropdown-item" (click)="logout()" *ngIf="isLoggedIn">Logout</a></li>
           </ul>
         </li>
       </ul>
@@ -46,20 +45,31 @@
         <h1 class="modal-title fs-5" id="loginModalLabel">Login</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <label for="password" class="form-label">Email address</label>
-          <input type="email" class="form-control" id="email">
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="password" class="form-label">Username or email address</label>
+            <input type="email" class="form-control" id="email" formControlName="usernameEmail">
+            <div *ngIf="registerForm.get('usernameEmail')?.touched && registerForm.get('usernameEmail')?.value === ''" class="text-danger">
+              <small class="text-danger">Please enter a username or an email adress</small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" formControlName="password">
+            <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.value === ''" class="text-danger">
+              <small class="text-danger">Please enter a password</small>
+            </div>
+          </div>
+          <div class="mb-3 text-center" *ngIf="error_login_msg">
+            <label class="text-danger">{{error_login_msg}}</label>
+          </div>
         </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Password</label>
-          <input type="password" class="form-control" id="password">
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" type="submit">Login</button>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Login</button>
-      </div>
+      </form>
     </div>
   </div>
 </div>
@@ -73,7 +83,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form [formGroup]="registerForm" (ngSubmit)="register()">
-      <div class="modal-body">
+        <div class="modal-body">
           <div class="mb-3">
             <label class="form-label">Username</label>
             <input type="text" class="form-control" formControlName="username">
