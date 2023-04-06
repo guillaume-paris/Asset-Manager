@@ -12,6 +12,8 @@ declare var window: any;
 })
 export class AppComponent {
 
+  generic_modal_test = false;
+
   loginModal: any;
   registerModal: any;
   
