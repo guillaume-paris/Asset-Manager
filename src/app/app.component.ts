@@ -14,6 +14,18 @@ export class AppComponent {
 
   generic_modal_test = false;
 
+  showLoginModal: boolean = false;
+  showRegisterModal: boolean = false;
+
+  hideLoginModal(): void {
+    console.log("hideLoginModal");
+    this.showLoginModal = false;
+  }
+
+  hideRegisterModal(): void {
+    this.showRegisterModal = false;
+  }
+
   loginModal: any;
   registerModal: any;
   

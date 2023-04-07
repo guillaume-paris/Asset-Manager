@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, Output, SimpleChanges, EventEmitter } from '@angular/core';
 import * as bootstrap from 'bootstrap';
 
 @Component({
@@ -8,6 +8,7 @@ import * as bootstrap from 'bootstrap';
 })
 export class GenericModalComponent implements OnChanges {
   @Input() showInput: boolean = false;
+  @Output() hideOutput = new EventEmitter<void>();
 
   show: boolean = false;
 
@@ -22,16 +23,19 @@ export class GenericModalComponent implements OnChanges {
     }
   }
 
-  private initializeModal(): void {
+  initializeModal(): void {
     this.modalEl = document.getElementById('genericModal');
     this.modal = new bootstrap.Modal(this.modalEl! as Element, {
       keyboard: false
     });
     this.modal.show();
+    console.log("showInput: " + this.showInput);
   }
 
-  private destroyModal(): void {
+  destroyModal(): void {
+    console.log("showInput: " + this.showInput);
     if (this.modal) {
+      this.hideOutput.emit();
       this.modal.hide();
     }
     this.modalEl = null;
