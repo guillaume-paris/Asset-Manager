@@ -12,13 +12,10 @@ declare var window: any;
 })
 export class AppComponent {
 
-  generic_modal_test = false;
-
   showLoginModal: boolean = false;
   showRegisterModal: boolean = false;
 
   hideLoginModal(): void {
-    console.log("hideLoginModal");
     this.showLoginModal = false;
   }
 
@@ -40,11 +37,6 @@ export class AppComponent {
     password: new FormControl('', Validators.required),
     confirmPassword: new FormControl('', Validators.required)
   }, { validators: this.passwordMatchValidator });
-
-  loginForm: FormGroup = new FormGroup ({ 
-    usernameEmail: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required)
-  });
   
   constructor(private authService: AuthService, private router: Router) { }
 
@@ -60,14 +52,12 @@ export class AppComponent {
   openModal(modal: any) {
     modal.show();
     this.registerForm.reset();
-    this.loginForm.reset();
     this.error_login_msg = undefined;
   }
 
   closeModal(modal: any) {
     modal.hide();
     this.registerForm.reset();
-    this.loginForm.reset();
   }
 
   register(): void {
@@ -84,25 +74,7 @@ export class AppComponent {
     this.closeModal(this.registerModal);
   }
 
-  login(): void {
-    if (!this.loginForm.valid) {
-      this.loginForm.markAllAsTouched();
-      return;
-    }
-    let usernameEmail = this.loginForm.get('usernameEmail')?.value;
-    let password = this.loginForm.get('password')?.value;
-    if (this.authService.login(usernameEmail, password)) {
-      this.error_login_msg = undefined;
-      this.isLoggedIn = true;
-      let possibleUsername = this.authService.getUsername(usernameEmail, password)
-      this.username = possibleUsername ? possibleUsername : usernameEmail
-      this.closeModal(this.loginModal);
-    }
-    else {
-      this.error_login_msg = 'Incorrect username / email or password';
-      this.isLoggedIn = false;
-    }
-  }
+  
 
   logout(): void {
     this.authService.logout();

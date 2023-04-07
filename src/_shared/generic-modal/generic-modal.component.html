@@ -1,5 +1,6 @@
-<div class="modal" [class.show]="show" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <ng-content></ng-content>
+<div *ngIf="show">
+    <div id="modal" class="modal2 show">
+        <ng-content></ng-content>
     </div>
+    <div class="overlay" (click)="toggle()"></div>
 </div>
