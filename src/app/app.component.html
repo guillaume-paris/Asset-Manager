@@ -28,7 +28,7 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-right">
             <li><a class="dropdown-item" (click)="showLoginModal = true" *ngIf="!isLoggedIn">Login</a></li>
-            <li><a class="dropdown-item" (click)="openModal(registerModal)" *ngIf="!isLoggedIn">Register</a></li>
+            <li><a class="dropdown-item" (click)="showRegisterModal = true" *ngIf="!isLoggedIn">Register</a></li>
             <li><a class="dropdown-item" (click)="logout()" *ngIf="isLoggedIn">Logout</a></li>
           </ul>
         </li>
@@ -39,58 +39,12 @@
 
 <!-- Login modal -->
 <generic-modal [showInput]="showLoginModal" (closePopupEvent)="hideLoginModal()">
-  <app-login (closeModal)="hideLoginModal()"></app-login>
+  <app-login (closeModal)="hideLoginModal()" (setConnected)="setConnected($event)"></app-login>
 </generic-modal>
 
 <!-- Register  Modal -->
-<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="registerModalLabel">Register</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form [formGroup]="registerForm" (ngSubmit)="register()">
-        <div class="modal-body">
-          <div class="mb-3">
-            <label class="form-label">Username</label>
-            <input type="text" class="form-control" formControlName="username">
-            <div *ngIf="registerForm.get('username')?.touched && registerForm.get('username')?.value === ''" class="text-danger">
-              <small class="text-danger">Please enter a username</small>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Email address</label>
-            <input type="text" class="form-control" formControlName="email">
-            <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.value === ''" class="text-danger">
-              <small class="text-danger">Please enter an email adress</small>
-            </div>
-            <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['email']" class="text-danger">
-              <small class="text-danger">Please enter a valid email adress</small>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Password</label>
-            <input type="password" class="form-control" formControlName="password">
-            <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.value === ''" class="text-danger">
-              <small class="text-danger">Please enter a password</small>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Confirm Password</label>
-            <input type="password" class="form-control" formControlName="confirmPassword">
-            <div *ngIf="registerForm.hasError('passwordMatch') && registerForm.get('confirmPassword')?.touched" class="text-danger">
-              <small class="text-danger">Please enter the same password</small>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button class="btn btn-primary" type="submit">Register</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+<generic-modal [showInput]="showRegisterModal" (closePopupEvent)="hideRegisterModal()">
+  <app-register (closeModal)="hideRegisterModal()" (setConnected)="setConnected($event)"></app-register>
+</generic-modal>
 
 <router-outlet></router-outlet>

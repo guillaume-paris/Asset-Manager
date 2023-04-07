@@ -1,6 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from 'src/_shared/services/auth.service';
 
 @Component({
@@ -10,17 +9,16 @@ import { AuthService } from 'src/_shared/services/auth.service';
 })
 export class LoginComponent implements OnInit {
   @Output() closeModal = new EventEmitter();
+  @Output() setConnected = new EventEmitter<string>();
 
-  constructor(private authService: AuthService, private router: Router) { }
-  
+  constructor(private authService: AuthService) { }
+
   ngOnInit(): void {
     this.error_login_msg = undefined;
-    
   }
   
   error_login_msg: string  | undefined;
   isLoggedIn: boolean = false;
-  username: string | undefined;
 
   loginForm: FormGroup = new FormGroup ({ 
     usernameEmail: new FormControl('', Validators.required),
@@ -38,8 +36,8 @@ export class LoginComponent implements OnInit {
       this.error_login_msg = undefined;
       this.isLoggedIn = true;
       let possibleUsername = this.authService.getUsername(usernameEmail, password)
-      this.username = possibleUsername ? possibleUsername : usernameEmail
-      this.closeModalHandler();
+      this.setConnected.emit(possibleUsername ? possibleUsername : usernameEmail);
+      this.closeModalHandler(true);
     }
     else {
       this.error_login_msg = 'Incorrect username / email or password';
@@ -47,9 +45,11 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  closeModalHandler(): void {
+  closeModalHandler(isConnected: boolean = false): void {
     this.error_login_msg = undefined;
     this.loginForm.reset();
+    if (!isConnected)
+      this.setConnected.emit('');
     this.closeModal.emit();
   }
 }
