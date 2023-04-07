@@ -1,6 +1,5 @@
-<div>
-    <div class="modal" id="genericModal" tabindex="-1">
-        <ng-content></ng-content>
+<div class="modal" [class.show]="show" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <ng-content></ng-content>
     </div>
-    <div (click)="destroyModal()"></div>
 </div>

@@ -1,5 +1,4 @@
 import { Component, Input, OnChanges, Output, SimpleChanges, EventEmitter } from '@angular/core';
-import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'generic-modal',
@@ -7,38 +6,26 @@ import * as bootstrap from 'bootstrap';
   styleUrls: ['./generic-modal.component.css']
 })
 export class GenericModalComponent implements OnChanges {
-  @Input() showInput: boolean = false;
-  @Output() hideOutput = new EventEmitter<void>();
+  @Input() show: boolean | undefined;
+  @Output() showChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  show: boolean = false;
-
-  private modalEl: HTMLElement | null = null;
-  private modal: bootstrap.Modal | null = null;
-  
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['showInput'] && changes['showInput'].currentValue) {
-      this.initializeModal();
-    } else {
-      this.destroyModal();
+    if (changes['show']) {
+      if (changes['show'].currentValue) {
+        console.log(changes);
+        this.showModal();
+      } else {
+        this.hideModal();
+      }
     }
   }
-
-  initializeModal(): void {
-    this.modalEl = document.getElementById('genericModal');
-    this.modal = new bootstrap.Modal(this.modalEl! as Element, {
-      keyboard: false
-    });
-    this.modal.show();
-    console.log("showInput: " + this.showInput);
+  showModal() {
+    this.show = true;
+    this.showChange.emit(this.show);
   }
 
-  destroyModal(): void {
-    console.log("showInput: " + this.showInput);
-    if (this.modal) {
-      this.hideOutput.emit();
-      this.modal.hide();
-    }
-    this.modalEl = null;
-    this.modal = null;
+  hideModal(): void {
+    this.show = false;
+    this.showChange.emit(this.show);
   }
 }
