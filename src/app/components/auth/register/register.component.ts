@@ -13,6 +13,8 @@ export class RegisterComponent {
 
   constructor(private authService: AuthService) { }
 
+  error_login_msg: string  | undefined;
+
   registerForm: FormGroup = new FormGroup({ 
     username: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -38,9 +40,13 @@ export class RegisterComponent {
     let usernameForm = this.registerForm.get('username')?.value;
     let emailForm = this.registerForm.get('email')?.value;
     let passwordForm = this.registerForm.get('password')?.value;
-    this.authService.register(usernameForm, emailForm, passwordForm);
-    this.setConnected.emit(usernameForm);
-    this.closeModalHandler(true);
+    let username = this.authService.register(usernameForm, emailForm, passwordForm);
+    if (!username) {
+      this.error_login_msg = 'Username or email already exists';
+    } else {
+      this.setConnected.emit(usernameForm);
+      this.closeModalHandler(true);
+    }
   }
 
   closeModalHandler(isConnected: boolean = false): void {

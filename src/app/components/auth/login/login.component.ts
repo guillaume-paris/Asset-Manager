@@ -18,7 +18,6 @@ export class LoginComponent implements OnInit {
   }
   
   error_login_msg: string  | undefined;
-  isLoggedIn: boolean = false;
 
   loginForm: FormGroup = new FormGroup ({ 
     usernameEmail: new FormControl('', Validators.required),
@@ -34,14 +33,12 @@ export class LoginComponent implements OnInit {
     let password = this.loginForm.get('password')?.value;
     if (this.authService.login(usernameEmail, password)) {
       this.error_login_msg = undefined;
-      this.isLoggedIn = true;
       let possibleUsername = this.authService.getUsername(usernameEmail, password)
       this.setConnected.emit(possibleUsername ? possibleUsername : usernameEmail);
       this.closeModalHandler(true);
     }
     else {
       this.error_login_msg = 'Incorrect username / email or password';
-      this.isLoggedIn = false;
     }
   }
 

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class AuthService {
-  isLoggedIn = false;
+  isLoggedIn: boolean = false;
   credentials = [{
     username: 'user',
     email: 'user@example.com',
@@ -12,6 +12,7 @@ export class AuthService {
   }];
 
   isRouteAuthenticated(): boolean {
+    console.log("isRoute authenticated : ", this.isLoggedIn);
     return this.isLoggedIn;
   };
 
@@ -51,9 +52,18 @@ export class AuthService {
     return "";
   }
 
-  register(username: string, email: string, password: string): void {
+  register(username: string, email: string, password: string): string {
     if (this.isRouteAuthenticated()) {
-      throw new Error('Already logged in');
+      return ("")
+    }
+    let isCredentialsMatch = false;
+    this.credentials.forEach(c => {
+      if (c.email === email || c.username === username) {
+        isCredentialsMatch = true;
+      }
+    });
+    if (isCredentialsMatch) {
+      return ("")
     }
     this.credentials.push({
       username,
@@ -61,6 +71,7 @@ export class AuthService {
       password
     });
     this.isLoggedIn = true;
+    return ("username");
   }
 
   logout(): void {
