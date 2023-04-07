@@ -31,13 +31,12 @@ export class LoginComponent implements OnInit {
     }
     let usernameEmail = this.loginForm.get('usernameEmail')?.value;
     let password = this.loginForm.get('password')?.value;
-    if (this.authService.login(usernameEmail, password)) {
+    let username = this.authService.login(usernameEmail, password);
+    if (username) {
       this.error_login_msg = undefined;
-      let possibleUsername = this.authService.getUsername(usernameEmail, password)
-      this.setConnected.emit(possibleUsername ? possibleUsername : usernameEmail);
+      this.setConnected.emit(username);
       this.closeModalHandler(true);
-    }
-    else {
+    } else {
       this.error_login_msg = 'Incorrect username / email or password';
     }
   }
