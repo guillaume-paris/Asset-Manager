@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { Toast } from 'bootstrap';
 import { AuthService } from 'src/_shared/services/auth.service';
 
 @Component({

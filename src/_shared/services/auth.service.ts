@@ -1,15 +1,19 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  isLoggedIn: boolean = false;
+  isLoggedIn: boolean;
   credentials = [{
     username: 'user',
     email: 'user@example.com',
     password: 'password'
   }];
+
+  constructor() {
+    this.isLoggedIn = false;
+  }
 
   isRouteAuthenticated(): boolean {
     console.log("isRoute authenticated : ", this.isLoggedIn);
