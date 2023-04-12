@@ -19,7 +19,6 @@
         <li class="nav-item pb-1 px-1" *ngIf="isLoggedIn">
           <a class="nav-link" routerLink="/asset-management" routerLinkActive="active">Asset management</a>
         </li>
-        
       </ul>
       <ul class="navbar-nav">
         <li class="nav-item dropdown">
@@ -47,6 +46,10 @@
   <app-register (closeModal)="hideRegisterModal()" (setConnected)="setConnected($event)"></app-register>
 </generic-modal>
 
+<button class="btn btn-primary m-3" (click)="toastService.showToast('Title test', 'This is a body test', 'danger');"> create a toast </button>
+
 <div class="m-2">
   <router-outlet></router-outlet>
 </div>
+
+<generic-toast></generic-toast>

@@ -16,12 +16,10 @@ export class AuthService {
   }
 
   isRouteAuthenticated(): boolean {
-    console.log("isRoute authenticated : ", this.isLoggedIn);
     return this.isLoggedIn;
   };
 
   login(usernameEmail: string, password: string): string {
-    console.log("' login called")
     if (this.isRouteAuthenticated()) {
       return ("");
     }
@@ -41,8 +39,6 @@ export class AuthService {
   }
 
   register(username: string, email: string, password: string): string {
-    console.log ('register called')
-    console.log("register called : ", username, email, password, 'with isLoggedIn : ', this.isLoggedIn)
     if (this.isRouteAuthenticated()) {
       return ("")
     }
@@ -65,7 +61,6 @@ export class AuthService {
   }
 
   logout(): void {
-    console.log("logout called");
     this.isLoggedIn = false;
   }
 }

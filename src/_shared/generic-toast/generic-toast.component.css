@@ -1,0 +1,30 @@
+.toast-border-left {
+    border-left-width: 4px;
+    border-left-style: solid;
+}
+
+.toast-border-left-danger {
+    border-left-color: #dc3545;
+}
+
+.toast-border-left-warning {
+    border-left-color: #ffc107;
+}
+
+.toast-border-left-info {
+    border-left-color: #0dcaf0;
+}
+
+.toast-border-left-success {
+    border-left-color: #198754;
+}
+
+.toast-header {
+    font-size: 16px;
+    border-bottom: none !important;
+}
+
+.toast-body {
+    font-size: 14px;
+    border-top: none !important;;
+}

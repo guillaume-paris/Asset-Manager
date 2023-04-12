@@ -1,18 +1,43 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
+import { Subscription } from 'rxjs';
+import * as bootstrap from 'bootstrap';
+import { GenericToastService } from '../services/generic-toast.service';
+
+
 
 @Component({
-  selector: 'app-generic-toast',
+  selector: 'generic-toast',
   templateUrl: './generic-toast.component.html',
   styleUrls: ['./generic-toast.component.css']
 })
 export class GenericToastComponent {
-  @Input()
+
+  genericToastSubscription!: Subscription;
   title: string | undefined;
-
-  @Input()
   body: string | undefined;
+  type: "danger" | "info" | "warning" | "success" | undefined;
 
-  @Input()
-  type: string | undefined;
+  constructor(private genericToastService: GenericToastService) {
+    this.subscribeGenericToast();
+  }
 
+  subscribeGenericToast() {
+    this.genericToastSubscription = this.genericToastService.genericToastChange.subscribe((d) => {
+      this.generateAndShowToast(d.title, d.body, d.type);
+    })
+  }
+
+  generateAndShowToast(title: string | undefined, body: string | undefined, type: "danger" | "info" | "warning" | "success" | undefined) {
+    this.title = title;
+    this.body = body;
+    this.type = type;
+    const toastLiveExample = document.getElementById('liveToast')
+    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample!);
+    toastBootstrap.show();
+  }
+
+  ngOnDestroy() {
+    this.genericToastSubscription.unsubscribe();
+  }
+  
 }

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { GenericModalComponent } from './generic-modal/generic-modal.component';
 import { GenericToastComponent } from './generic-toast/generic-toast.component';
+import { GenericToastService } from './services/generic-toast.service';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { GenericToastComponent } from './generic-toast/generic-toast.component';
     GenericToastComponent
   ],
   providers: [
-    AuthGuard
+    AuthGuard,
+    GenericToastService
   ]
 })
 export class SharedModule { }

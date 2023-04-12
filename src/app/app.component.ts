@@ -1,14 +1,16 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import * as bootstrap from 'bootstrap';
 import { Toast } from 'bootstrap';
 import { AuthService } from 'src/_shared/services/auth.service';
+import { GenericToastService } from 'src/_shared/services/generic-toast.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   showLoginModal: boolean = false;
   showRegisterModal: boolean = false;
@@ -16,7 +18,19 @@ export class AppComponent {
   isLoggedIn: boolean = false;
   username: string | undefined;
   
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router, public toastService: GenericToastService) { }
+  
+  ngOnInit(): void {
+    const toastTrigger = document.getElementById('liveToastBtn')
+    const toastLiveExample = document.getElementById('liveToast')
+
+    if (toastTrigger && toastLiveExample) {
+      const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+      toastTrigger.addEventListener('click', () => {
+        toastBootstrap.show();
+      });
+    }
+  }
 
   hideLoginModal(): void {
     this.showLoginModal = false;
@@ -31,6 +45,7 @@ export class AppComponent {
     this.isLoggedIn = false;
     this.username = "";
     this.router.navigate(['/']);
+    this.toastService.showToast('Title test', 'This is a body test', 'success');
   }
 
   setConnected(username: any): void {
