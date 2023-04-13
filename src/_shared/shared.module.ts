@@ -4,6 +4,7 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { GenericModalComponent } from './generic-modal/generic-modal.component';
 import { GenericToastComponent } from './generic-toast/generic-toast.component';
 import { GenericToastService } from './services/generic-toast.service';
+import { UserService } from './services/user.service';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { GenericToastService } from './services/generic-toast.service';
   ],
   providers: [
     AuthGuard,
-    GenericToastService
+    GenericToastService,
+    UserService
   ]
 })
 export class SharedModule { }

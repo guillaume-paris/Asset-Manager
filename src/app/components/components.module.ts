@@ -14,10 +14,6 @@ import { SharedModule } from 'src/_shared/shared.module';
 
 @NgModule({
   declarations: [
-    HomeComponent,
-    UserComponent,
-    AssetComponent,
-    AssetManagementComponent,
     LoginComponent,
     RegisterComponent
   ],

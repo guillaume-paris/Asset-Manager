@@ -45,7 +45,6 @@ export class AppComponent implements OnInit {
     this.isLoggedIn = false;
     this.username = "";
     this.router.navigate(['/']);
-    this.toastService.showToast('Title test', 'This is a body test', 'success');
   }
 
   setConnected(username: any): void {

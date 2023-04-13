@@ -1,0 +1,12 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="addUserModalLabel">Remove {{user.firstName}} {{user.lastName}} #{{user.id}}</h5>
+            <button type="button" class="btn-close" aria-label="Close" (click)="hideModal()"></button>
+        </div>
+        <div class="modal-footer mt-4">
+            <button type="button" class="btn btn-secondary mx-2" (click)="hideModal()">Close</button>
+            <button type="button" class="btn btn-danger mx-2" (click)="saveRemoveUser()">Remove user</button>
+        </div>
+    </div>
+</div>

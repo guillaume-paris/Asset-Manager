@@ -46,8 +46,6 @@
   <app-register (closeModal)="hideRegisterModal()" (setConnected)="setConnected($event)"></app-register>
 </generic-modal>
 
-<button class="btn btn-primary m-3" (click)="toastService.showToast('Title test', 'This is a body test', 'danger');"> create a toast </button>
-
 <div class="m-2">
   <router-outlet></router-outlet>
 </div>

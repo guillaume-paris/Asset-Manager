@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { GenericToastComponent } from '../generic-toast/generic-toast.component';
 import { Subject } from 'rxjs';
 
 export interface ToastInfo {
