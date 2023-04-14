@@ -1,0 +1,61 @@
+{
+    "filter": [
+        {
+            "name": "name",
+            "isActive": true
+        },
+        {
+            "name": "description",
+            "isActive": true
+        },
+        {
+            "name": "Brand",
+            "isActive": true
+        },
+        {
+            "name": "price (€)",
+            "isActive": true
+        },
+        {
+            "name": "quantity",
+            "isActive": true
+        },
+        {
+            "name": "category",
+            "isActive": true
+        }
+    ],
+    "rows": [
+        {
+            "row": [
+                "Iphone 14",
+                "This is a cell phone",
+                "Apple",
+                "1200",
+                "10",
+                "Electronics"
+            ]
+            
+        },
+        {
+            "row": [
+                "Laptop G40",
+                "This is a laptop",
+                "Dell",
+                "2400",
+                "5",
+                "Electronics"
+            ]
+        },
+        {
+            "row": [
+                "Bag",
+                "Used to carry things",
+                "Eastpack",
+                "60",
+                "50",
+                "Electronics"
+            ]
+        }
+    ]
+}

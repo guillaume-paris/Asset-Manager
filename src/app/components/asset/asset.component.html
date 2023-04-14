@@ -1,1 +1,11 @@
-<p>asset works!</p>
+<generic-crud-table [datas]="assets" [dataSelected]="assetSelected" (toggleCreateModal)="toggleCreateModal()" (toggleUpdateModal)="toggleUpdateModal()" (toggleDeleteModal)="toggleDeleteModal()">
+    <generic-modal [showInput]="createModal" (closePopupEvent)="toggleCreateModal()">
+    </generic-modal>
+    
+    <generic-modal [showInput]="updateModal" (closePopupEvent)="toggleUpdateModal()">
+    </generic-modal>
+    
+    <generic-modal [showInput]="deleteModal" (closePopupEvent)="toggleDeleteModal()">
+        <app-delete-asset [row]="assets.rows[0]" (closePopupEvent)="toggleDeleteModal()"></app-delete-asset>
+    </generic-modal>
+</generic-crud-table>
