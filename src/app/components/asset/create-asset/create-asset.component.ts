@@ -25,6 +25,7 @@ export class CreateAssetComponent {
   constructor(private assetService: AssetService, private toastService: GenericToastService) { }
 
   hideModal(): void {
+    this.createAssetForm.reset();
     this.closePopupEvent.emit();
   }
 

@@ -1,19 +1,19 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { GenericToastService } from 'src/_shared/services/generic-toast.service';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { UserService } from 'src/_shared/services/user.service';
-import { User } from 'src/_shared/models/user.model';
+import { IGenericTableRow } from 'src/_shared/models/generic-crud-table.model';
 
 @Component({
-  selector: 'app-edit-user',
-  templateUrl: './edit-user.component.html',
-  styleUrls: ['./edit-user.component.css']
+  selector: 'app-create-user',
+  templateUrl: './create-user.component.html',
+  styleUrls: ['./create-user.component.css']
 })
-export class EditUserComponent implements OnInit {
+export class CreateUserComponent {
   @Output() closePopupEvent = new EventEmitter();
-  @Input() user!: User;
+  @Output() create = new EventEmitter();
 
-  editUserForm: FormGroup = new FormGroup ({ 
+  createUserForm: FormGroup = new FormGroup ({ 
     firstName: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -21,15 +21,6 @@ export class EditUserComponent implements OnInit {
   }, { validators: this.passwordMatchValidator });
 
   constructor(private toastService: GenericToastService, private userService: UserService) { }
-
-  ngOnInit(): void {
-    this.editUserForm.setValue({
-      firstName: this.user.firstName,
-      lastName: this.user.lastName,
-      email: this.user.email,
-      role: this.user.role
-    });
-  }
 
   passwordMatchValidator(control: AbstractControl): { [key: string]: boolean } | null {
     const password = control.get('password');
@@ -42,20 +33,29 @@ export class EditUserComponent implements OnInit {
   }
 
   hideModal(): void {
-    this.editUserForm.reset();
+    this.createUserForm.reset();
     this.closePopupEvent.emit();
   }
 
-  saveEditUser(): void {
-    if (!this.editUserForm.valid) {
-      this.editUserForm.markAllAsTouched();
+  saveCreateUser(): void {
+    if (!this.createUserForm.valid) {
+      this.createUserForm.markAllAsTouched();
       return;
     }
-    if (!this.userService.editUserDataById(this.user.id, this.user)) {
+    let newUser: IGenericTableRow = {
+      values: [
+        this.createUserForm.value.firstName,
+        this.createUserForm.value.lastName,
+        this.createUserForm.value.email,
+        this.createUserForm.value.role
+      ],
+      id: 0
+    }
+    if (!this.userService.createUser(newUser)) {
       this.toastService.showToast('Oops, an error occured', 'Sorry, an error occured, try again later', 'danger');
     }
-    this.toastService.showToast('Edit succesfully','User has been edited successfully','success');
-    this.editUserForm.reset();
-    this.closePopupEvent.emit();
+    this.toastService.showToast('Add successfully','User has been added succesfully','success');
+    this.hideModal();
+    this.create.emit();
   }
 }

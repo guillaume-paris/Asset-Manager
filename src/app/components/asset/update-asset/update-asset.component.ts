@@ -37,6 +37,7 @@ export class UpdateAssetComponent implements OnInit {
   }
 
   hideModal(): void {
+    this.editAssetForm.reset();
     this.closePopupEvent.emit();
   }
 

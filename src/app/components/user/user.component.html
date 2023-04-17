@@ -1,4 +1,4 @@
-<div>
+<!-- <div>
     <div class="row mt-5">
         <div class="offset-1 col-1 p-2 text-center">
             <i class="fa-solid fa-sliders fa-xl action-icon" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
@@ -78,4 +78,18 @@
 
 <generic-modal [showInput]="removeUserModal" (closePopupEvent)="hideRemoveUserModal()" *ngIf="removeUserModal">
     <app-remove-user (closePopupEvent)="hideRemoveUserModal()" [user]="user"></app-remove-user>
-</generic-modal>
+</generic-modal> -->
+
+<generic-crud-table [datas]="users" [(dataSelected)]="userSelected" (toggleCreateModal)="toggleCreateModal()" (toggleUpdateModal)="toggleUpdateModal()" (toggleDeleteModal)="toggleDeleteModal()">
+    <generic-modal [showInput]="createModal" (closePopupEvent)="toggleCreateModal()" *ngIf="createModal">
+        <app-create-user (create)="createUser()"  (closePopupEvent)="toggleCreateModal()"></app-create-user>
+    </generic-modal>
+    
+    <generic-modal [showInput]="updateModal" (closePopupEvent)="toggleUpdateModal()" *ngIf="updateModal">
+        <app-update-user [row]="userSelected" (update)="updateUser()" (closePopupEvent)="toggleUpdateModal()"></app-update-user>
+    </generic-modal>
+    
+    <generic-modal [showInput]="deleteModal" (closePopupEvent)="toggleDeleteModal()" *ngIf="deleteModal">
+        <app-delete-user [row]="userSelected" (delete)="deleteUser()" (closePopupEvent)="toggleDeleteModal()"></app-delete-user>
+    </generic-modal>
+</generic-crud-table>

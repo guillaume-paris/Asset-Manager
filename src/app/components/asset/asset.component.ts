@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import data from '../../config/asset.config.json'
 import { IGenericTable, IGenericTableRow } from 'src/_shared/models/generic-crud-table.model';
 import { AssetService } from 'src/_shared/services/asset.service';
 import { GenericToastService } from 'src/_shared/services/generic-toast.service';

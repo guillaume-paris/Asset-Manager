@@ -1,46 +1,46 @@
 <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addUserModalLabel">Edit {{user.firstName}} {{user.lastName}} #{{user.id}}</h5>
+        <h5 class="modal-title" id="addUserModalLabel">Create a new user</h5>
         <button type="button" class="btn-close" aria-label="Close" (click)="hideModal()"></button>
       </div>
-      <form [formGroup]="editUserForm" (ngSubmit)="saveEditUser()" class="mt-4">
+      <form [formGroup]="createUserForm" (ngSubmit)="saveCreateUser()" class="mt-4">
         <div class="modal-body">
           <div class="mb-3">
             <label for="firstName" class="form-label">First Name</label>
             <input type="text" class="form-control" formControlName="firstName" placeholder="Enter first name">
-            <div *ngIf="editUserForm.get('firstName')?.touched && editUserForm.get('firstName')?.value === ''" class="text-danger">
+            <div *ngIf="createUserForm.get('firstName')?.touched && createUserForm.get('firstName')?.value === ''" class="text-danger">
               <small class="text-danger">Please enter a first name</small>
             </div>
           </div>
           <div class="mb-3">
             <label for="lastName" class="form-label">Last Name</label>
             <input type="text" class="form-control" formControlName="lastName" placeholder="Enter last name">
-            <div *ngIf="editUserForm.get('lastName')?.touched && editUserForm.get('lastName')?.value === ''" class="text-danger">
+            <div *ngIf="createUserForm.get('lastName')?.touched && createUserForm.get('lastName')?.value === ''" class="text-danger">
               <small class="text-danger">Please enter a last name</small>
             </div>
           </div>
           <div class="mb-3">
             <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" formControlName="email" placeholder="Enter email">
-            <div *ngIf="editUserForm.get('email')?.touched && editUserForm.get('email')?.value === ''" class="text-danger">
+            <div *ngIf="createUserForm.get('email')?.touched && createUserForm.get('email')?.value === ''" class="text-danger">
               <small class="text-danger">Please enter an email adress</small>
             </div>
-            <div *ngIf="editUserForm.get('email')?.touched && editUserForm.get('email')?.errors?.['email']" class="text-danger">
+            <div *ngIf="createUserForm.get('email')?.touched && createUserForm.get('email')?.errors?.['email']" class="text-danger">
               <small class="text-danger">Please enter a valid email adress</small>
             </div>
           </div>
           <div class="mb-3">
             <label for="role" class="form-label">Role</label>
             <input type="text" class="form-control" formControlName="role" placeholder="Enter role">
-            <div *ngIf="editUserForm.get('role')?.touched && editUserForm.get('role')?.value === ''" class="text-danger">
+            <div *ngIf="createUserForm.get('role')?.touched && createUserForm.get('role')?.value === ''" class="text-danger">
               <small class="text-danger">Please enter a role</small>
             </div>
           </div>
         </div>
         <div class="modal-footer mt-4">
           <button type="button" class="btn btn-secondary mx-2" (click)="hideModal()">Close</button>
-          <button type="submit" class="btn btn-primary mx-2">Save changes</button>
+          <button type="submit" class="btn btn-success mx-2">Create</button>
         </div>
       </form>
     </div>
