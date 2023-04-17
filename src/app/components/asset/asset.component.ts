@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import data from '../../config/asset.config.json'
 import { IGenericTable, IGenericTableRow } from 'src/_shared/models/generic-crud-table.model';
+import { AssetService } from 'src/_shared/services/asset.service';
+import { GenericToastService } from 'src/_shared/services/generic-toast.service';
 
 @Component({
   selector: 'app-asset',
@@ -15,9 +17,8 @@ export class AssetComponent {
   updateModal: boolean = false;
   deleteModal: boolean = false;
 
-  constructor() {
-    this.assets = data;
-    console.log(this.assets);
+  constructor(private assetService: AssetService, private toastService: GenericToastService) {
+    this.assets = assetService.getAssets();
   }
 
   toggleCreateModal(): void {
@@ -30,6 +31,17 @@ export class AssetComponent {
 
   toggleDeleteModal(): void {
     this.deleteModal =!this.deleteModal;
-    console.log("assetSelected :", this.assetSelected)
+  }
+
+  deleteAsset(): void {
+    this.assets = this.assetService.getAssets();
+  }
+
+  updateAsset(): void {
+    this.assets = this.assetService.getAssets();
+  }
+
+  createAsset(): void {
+    this.assets = this.assetService.getAssets();
   }
 }

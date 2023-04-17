@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { IFilter, IGenericTable, IGenericTableRow } from '../models/generic-crud-table.model';
-import { IAsset, IAssetFilter } from '../models/asset.model';
+import { IGenericTable, IGenericTableRow } from '../models/generic-crud-table.model';
 
 @Component({
   selector: 'generic-crud-table',
@@ -12,6 +11,10 @@ export class GenericCrudTableComponent {
   datas!: IGenericTable;
   @Input()
   dataSelected!: IGenericTableRow;
+
+  // bedirectional relationship between dataSelected and dataSelectedChange thanks to "Change" at the end of the variable name
+  @Output()
+  dataSelectedChange: EventEmitter<IGenericTableRow> = new EventEmitter<IGenericTableRow>();
 
   @Output()
   toggleCreateModal: EventEmitter<boolean> = new EventEmitter();
@@ -28,7 +31,7 @@ export class GenericCrudTableComponent {
 
   filterValues(rows: IGenericTableRow[]): IGenericTableRow[] {
     let rowsFiltered = rows.filter(row => {
-      let rowValues = row.row.map(value => 
+      let rowValues = row.values.map(value => 
         value.toString().toLowerCase());
         return rowValues.some(value => value.includes(this.searchBarText.toLowerCase()));
     });
@@ -40,12 +43,12 @@ export class GenericCrudTableComponent {
   }
 
   onUpdate(dataSelected: IGenericTableRow): void {
-    this.dataSelected = dataSelected;
+    this.dataSelectedChange.emit(dataSelected);
     this.toggleUpdateModal.emit();
   }
-
+  
   onDelete(dataSelected: IGenericTableRow): void {
-    this.dataSelected = dataSelected;
+    this.dataSelectedChange.emit(dataSelected);
     this.toggleDeleteModal.emit();
   }
 }

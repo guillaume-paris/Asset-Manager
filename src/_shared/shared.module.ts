@@ -5,6 +5,7 @@ import { GenericModalComponent } from './generic-modal/generic-modal.component';
 import { GenericToastComponent } from './generic-toast/generic-toast.component';
 import { GenericToastService } from './services/generic-toast.service';
 import { UserService } from './services/user.service';
+import { AssetService } from './services/asset.service';
 import { GenericCrudTableModule } from './generic-crud-table/generic-crud-table.module';
 
 
@@ -25,7 +26,8 @@ import { GenericCrudTableModule } from './generic-crud-table/generic-crud-table.
   providers: [
     AuthGuard,
     GenericToastService,
-    UserService
+    UserService,
+    AssetService
   ]
 })
 export class SharedModule { }

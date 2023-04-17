@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AssetRoutingModule } from './asset-routing.module';
 import { SharedModule } from 'src/_shared/shared.module';
@@ -19,7 +20,9 @@ import { DeleteAssetComponent } from './delete-asset/delete-asset.component';
   imports: [
     CommonModule,
     AssetRoutingModule,
-    SharedModule
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class AssetModule { }

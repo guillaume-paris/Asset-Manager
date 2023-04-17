@@ -1,1 +1,58 @@
-<p>create-asset works!</p>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="addUserModalLabel">Create a new asset</h5>
+            <button type="button" class="btn-close" aria-label="Close" (click)="hideModal()"></button>
+        </div>
+        <form [formGroup]="createAssetForm" (ngSubmit)="saveCreateAsset()" class="mt-4">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="firstName" class="form-label">Name</label>
+              <input type="text" class="form-control" formControlName="name" placeholder="Enter name">
+              <div *ngIf="createAssetForm.get('name')?.touched && createAssetForm.get('name')?.value === ''" class="text-danger">
+                <small class="text-danger">Please enter a name</small>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="lastName" class="form-label">Description</label>
+              <input type="text" class="form-control" formControlName="description" placeholder="Enter description">
+              <div *ngIf="createAssetForm.get('description')?.touched && createAssetForm.get('description')?.value === ''" class="text-danger">
+                <small class="text-danger">Please enter a description</small>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Brand</label>
+              <input type="email" class="form-control" formControlName="brand" placeholder="Enter brand">
+              <div *ngIf="createAssetForm.get('brand')?.touched && createAssetForm.get('brand')?.value === ''" class="text-danger">
+                <small class="text-danger">Please enter a brand</small>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Price (€)</label>
+              <input type="email" class="form-control" formControlName="price" placeholder="Enter price in €">
+              <div *ngIf="createAssetForm.get('price')?.touched && createAssetForm.get('price')?.value === ''" class="text-danger">
+                <small class="text-danger">Please enter a price</small>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="role" class="form-label">Quantity</label>
+              <input type="text" class="form-control" formControlName="quantity" placeholder="Enter quantity">
+              <div *ngIf="createAssetForm.get('quantity')?.touched && createAssetForm.get('quantity')?.value === ''" class="text-danger">
+                <small class="text-danger">Please enter a role</small>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="role" class="form-label">Category</label>
+              <input type="text" class="form-control" formControlName="category" placeholder="Enter category">
+              <div *ngIf="createAssetForm.get('category')?.touched && createAssetForm.get('category')?.value === ''" class="text-danger">
+                <small class="text-danger">Please enter a category</small>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer mt-4">
+            <button type="button" class="btn btn-secondary mx-2" (click)="hideModal()">Close</button>
+            <button type="submit" class="btn btn-primary mx-2">Create</button>
+          </div>
+        </form>
+    </div>
+</div>

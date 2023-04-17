@@ -1,11 +1,13 @@
-<generic-crud-table [datas]="assets" [dataSelected]="assetSelected" (toggleCreateModal)="toggleCreateModal()" (toggleUpdateModal)="toggleUpdateModal()" (toggleDeleteModal)="toggleDeleteModal()">
-    <generic-modal [showInput]="createModal" (closePopupEvent)="toggleCreateModal()">
+<generic-crud-table [datas]="assets" [(dataSelected)]="assetSelected" (toggleCreateModal)="toggleCreateModal()" (toggleUpdateModal)="toggleUpdateModal()" (toggleDeleteModal)="toggleDeleteModal()">
+    <generic-modal [showInput]="createModal" (closePopupEvent)="toggleCreateModal()" *ngIf="createModal">
+        <app-create-asset (create)="createAsset()"  (closePopupEvent)="toggleCreateModal()"></app-create-asset>
     </generic-modal>
     
-    <generic-modal [showInput]="updateModal" (closePopupEvent)="toggleUpdateModal()">
+    <generic-modal [showInput]="updateModal" (closePopupEvent)="toggleUpdateModal()" *ngIf="updateModal">
+        <app-update-asset [row]="assetSelected" (update)="updateAsset()" (closePopupEvent)="toggleUpdateModal()"></app-update-asset>
     </generic-modal>
     
-    <generic-modal [showInput]="deleteModal" (closePopupEvent)="toggleDeleteModal()">
-        <app-delete-asset [row]="assets.rows[0]" (closePopupEvent)="toggleDeleteModal()"></app-delete-asset>
+    <generic-modal [showInput]="deleteModal" (closePopupEvent)="toggleDeleteModal()" *ngIf="deleteModal">
+        <app-delete-asset [row]="assetSelected" (delete)="deleteAsset()" (closePopupEvent)="toggleDeleteModal()"></app-delete-asset>
     </generic-modal>
 </generic-crud-table>

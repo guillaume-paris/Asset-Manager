@@ -1,18 +1,11 @@
-export interface IFilter {
-    firstName: boolean;
-    lastName: boolean;
-    email: boolean;
-    phone: boolean;
-    role: boolean;
-}
-
 export interface IGenericTableFilter {
     name: string;
     isActive: boolean;
 }
 
 export interface IGenericTableRow {
-    row: string[];
+    values: string[];
+    id: number;
 }
 
 export interface IGenericTable {
