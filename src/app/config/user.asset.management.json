@@ -1,0 +1,21 @@
+{
+    "filter": [
+        {
+            "name": "user",
+            "isActive": true
+        },
+        {
+            "name": "asset",
+            "isActive": true
+        }
+    ],
+    "rows": [
+        {
+            "values": [
+                "Françis Lalanne",
+                "Iphone 14"
+            ],
+            "id": 0
+        }
+    ]
+}

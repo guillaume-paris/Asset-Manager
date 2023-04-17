@@ -1,1 +1,12 @@
-<p>asset-management works!</p>
+<generic-crud-table [datas]="assetManagement" [(dataSelected)]="assetManagementSelected" (toggleCreateModal)="toggleCreateModal()" (toggleUpdateModal)="toggleUpdateModal()" (toggleDeleteModal)="toggleDeleteModal()">
+    <generic-modal [showInput]="createModal" (closePopupEvent)="toggleCreateModal()" *ngIf="createModal">
+    </generic-modal>
+    
+    <generic-modal [showInput]="updateModal" (closePopupEvent)="toggleUpdateModal()" *ngIf="updateModal">
+        <app-update-asset-management [row]="assetManagementSelected" (update)="updateAssetManagement()" (closePopupEvent)="toggleUpdateModal()"></app-update-asset-management>
+    </generic-modal>
+    
+    <generic-modal [showInput]="deleteModal" (closePopupEvent)="toggleDeleteModal()" *ngIf="deleteModal">
+        <app-delete-asset-management [row]="assetManagementSelected" (delete)="deleteAssetManagement()" (closePopupEvent)="toggleDeleteModal()"></app-delete-asset-management> 
+    </generic-modal>
+</generic-crud-table>

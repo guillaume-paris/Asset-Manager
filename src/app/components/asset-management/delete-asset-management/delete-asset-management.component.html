@@ -1,0 +1,16 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Delete links between</h5>
+            <button type="button" class="btn-close" aria-label="Close" (click)="hideModal()"></button>
+        </div>
+        <div class="modal-body mt-4">
+            <h5 class="modal-body"><u>{{row.values[0]}}</u> and <u>{{row.values[1]}}</u></h5>
+
+        </div>
+        <div class="modal-footer mt-4">
+            <button type="button" class="btn btn-secondary mx-2" (click)="hideModal()">Cancel</button>
+            <button type="button" class="btn btn-danger mx-2" (click)="onDelete()">Delete</button>
+        </div>
+    </div>
+</div>

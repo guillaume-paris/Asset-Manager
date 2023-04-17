@@ -7,6 +7,7 @@ import { GenericToastService } from './services/generic-toast.service';
 import { UserService } from './services/user.service';
 import { AssetService } from './services/asset.service';
 import { GenericCrudTableModule } from './generic-crud-table/generic-crud-table.module';
+import { AssetManagementService } from './services/asset.management.service';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { GenericCrudTableModule } from './generic-crud-table/generic-crud-table.
     AuthGuard,
     GenericToastService,
     UserService,
-    AssetService
+    AssetService,
+    AssetManagementService
   ]
 })
 export class SharedModule { }
