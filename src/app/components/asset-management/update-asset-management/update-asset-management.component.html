@@ -9,17 +9,14 @@
               <div class="mb-3">
                 <label for="firstName" class="form-label">User</label>
                 <select class="form-select" formControlName="user" aria-label="User selection" (change)="refreshAssetsForUser()">
-                    <option *ngFor="let user of users.rows" [value]="user.id" [selected]="(user.values[0] + ' ' + user.values[1]) === editAssetManagementForm.value.user">{{user.values[0]}} {{user.values[1]}}</option>
+                  <option *ngFor="let user of users.rows" [value]="(user.values[0] + ' ' + user.values[1])" [selected]="(user.values[0] + ' ' + user.values[1]) === editAssetManagementForm.value.user">{{user.values[0]}} {{user.values[1]}}</option>
                 </select>
               </div>
               <div class="mb-3">
                 <label for="lastName" class="form-label">Asset</label>
                 <select class="form-select" formControlName="asset" aria-label="Default select example">
-                    <option *ngFor="let asset of assets" [value]="asset.id" [selected]="asset.id === editAssetManagementForm.value.asset">{{asset.values[0]}}</option>
+                    <option *ngFor="let asset of assets" [value]="asset.values[0]" [selected]="asset.values[0] === editAssetManagementForm.value.asset">{{asset.values[0]}}</option>
                 </select>
-                <div *ngIf="editAssetManagementForm.get('description')?.touched && editAssetManagementForm.get('description')?.value === ''" class="text-danger">
-                  <small class="text-danger">Please enter a description</small>
-                </div>
               </div>
             </div>
             <div class="modal-footer mt-4">

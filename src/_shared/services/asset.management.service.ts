@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IGenericTable, IGenericTableRow } from '../models/generic-crud-table.model';
-import data from '../../app/config/user.asset.management.json'
+import data from '../../app/config/asset.management.config.json'
 import { AssetService } from './asset.service';
 import { UserService } from './user.service';
 
@@ -22,15 +22,24 @@ export class AssetManagementService {
     return this.users;
   }
 
-  getAssetsForUser(user: IGenericTableRow): IGenericTableRow[] {
-    let assetsAvailable: IGenericTableRow[];
+  getAssetsForUser(user: string): IGenericTableRow[] {
+    let assetsOfUser: string[] = [];
+    let assetsAvailable: IGenericTableRow[] = [];
     if (user) {
-      assetsAvailable = this.assets.rows.filter(asset => {
-        return asset.id === user.id;
+      this.assetManagement.rows.filter(row => {
+        if (row.values[0] === user)
+          assetsOfUser.push(row.values[1])
       });
-      return assetsAvailable
+      this.assets.rows.filter(asset => {
+        if (!assetsOfUser.includes(asset.values[0]))
+          assetsAvailable.push(asset);
+      });
     }
-    return [];
+    return assetsAvailable;
+  }
+
+  getAssets(): IGenericTableRow[] {
+    return this.assets.rows;
   }
 
   getAssetManagement(): IGenericTable {

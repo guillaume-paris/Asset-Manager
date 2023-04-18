@@ -12,7 +12,7 @@ export class AuthService {
   }];
 
   constructor() {
-    this.isLoggedIn = true;
+    this.isLoggedIn = false;
   }
 
   isRouteAuthenticated(): boolean {

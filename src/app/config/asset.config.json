@@ -58,6 +58,28 @@
                 "Electronics"
             ],
             "id": 2
+        },
+        {
+            "values": [
+                "Highlighter",
+                "Used to highlight things",
+                "BIC",
+                "5",
+                "200",
+                "Furniture"
+            ],
+            "id": 3
+        },
+        {
+            "values": [
+                "Pen",
+                "Used to write things",
+                "BIC",
+                "20",
+                "100",
+                "Furniture"
+            ],
+            "id": 4
         }
     ]
 }

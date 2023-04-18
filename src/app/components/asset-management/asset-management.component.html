@@ -1,5 +1,6 @@
 <generic-crud-table [datas]="assetManagement" [(dataSelected)]="assetManagementSelected" (toggleCreateModal)="toggleCreateModal()" (toggleUpdateModal)="toggleUpdateModal()" (toggleDeleteModal)="toggleDeleteModal()">
     <generic-modal [showInput]="createModal" (closePopupEvent)="toggleCreateModal()" *ngIf="createModal">
+        <app-create-asset-management (create)="createAssetManagement()" (closePopupEvent)="toggleCreateModal()"></app-create-asset-management>
     </generic-modal>
     
     <generic-modal [showInput]="updateModal" (closePopupEvent)="toggleUpdateModal()" *ngIf="updateModal">

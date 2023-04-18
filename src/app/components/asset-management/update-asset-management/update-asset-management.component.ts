@@ -2,8 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IGenericTable, IGenericTableRow } from 'src/_shared/models/generic-crud-table.model';
 import { AssetManagementService } from 'src/_shared/services/asset.management.service';
-import { AssetService } from 'src/_shared/services/asset.service';
-import { UserService } from 'src/_shared/services/user.service';
 import { GenericToastService } from 'src/_shared/services/generic-toast.service';
 
 @Component({
@@ -34,10 +32,17 @@ export class UpdateAssetManagementComponent implements OnInit {
       asset: this.row.values[1]
     });
     this.assets = this.assetManagementService.getAssetsForUser(this.editAssetManagementForm.value.user);
+    let currentObject: IGenericTableRow = {
+      values: [this.row.values[1]],
+      id: this.row.id
+    }
+    this.assets.push(currentObject);
+    console.log('assets when load the component: ', this.assets);
   }
 
   refreshAssetsForUser(): void {
     this.assets = this.assetManagementService.getAssetsForUser(this.editAssetManagementForm.value.user);
+    console.log('assets: ', this.assets);
   }
 
   hideModal(): void {
