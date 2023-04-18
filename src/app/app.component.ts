@@ -1,93 +1,43 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import * as bootstrap from 'bootstrap';
+import { Toast } from 'bootstrap';
 import { AuthService } from 'src/_shared/services/auth.service';
-import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
-
-declare var window: any;
+import { GenericToastService } from 'src/_shared/services/generic-toast.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
-  loginModal: any;
-  registerModal: any;
-  
+  showLoginModal: boolean = false;
+  showRegisterModal: boolean = false;
+
   isLoggedIn: boolean = false;
-  title = 'AssetManagement';
   username: string | undefined;
-  error_login_msg: string | undefined;
-
-  registerForm: FormGroup = new FormGroup({ 
-    username: new FormControl('', Validators.required),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', Validators.required),
-    confirmPassword: new FormControl('', Validators.required)
-  }, { validators: this.passwordMatchValidator });
-
-  loginForm: FormGroup = new FormGroup ({ 
-    usernameEmail: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required)
-  });
   
-  constructor(private authService: AuthService, private router: Router) { }
-
+  constructor(private authService: AuthService, private router: Router, public toastService: GenericToastService) { }
+  
   ngOnInit(): void {
-    this.registerModal = new window.bootstrap.Modal(
-      document.getElementById('registerModal')
-    );
-    this.loginModal = new window.bootstrap.Modal(
-      document.getElementById('loginModal')
-    );
+    const toastTrigger = document.getElementById('liveToastBtn')
+    const toastLiveExample = document.getElementById('liveToast')
+
+    if (toastTrigger && toastLiveExample) {
+      const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+      toastTrigger.addEventListener('click', () => {
+        toastBootstrap.show();
+      });
+    }
   }
 
-  openModal(modal: any) {
-    modal.show();
-    this.registerForm.reset();
-    this.loginForm.reset();
-    this.error_login_msg = undefined;
+  hideLoginModal(): void {
+    this.showLoginModal = false;
   }
 
-  closeModal(modal: any) {
-    modal.hide();
-    this.registerForm.reset();
-    this.loginForm.reset();
-  }
-
-  register(): void {
-    if (!this.registerForm.valid) {
-      this.registerForm.markAllAsTouched();
-      return;
-    }
-    let username = this.registerForm.get('username')?.value;
-    let email = this.registerForm.get('email')?.value;
-    let password = this.registerForm.get('password')?.value;
-    this.authService.register(username, email, password);
-    this.isLoggedIn = true;
-    this.username = username;
-    this.closeModal(this.registerModal);
-  }
-
-  login(): void {
-    if (!this.loginForm.valid) {
-      this.loginForm.markAllAsTouched();
-      return;
-    }
-    let usernameEmail = this.loginForm.get('usernameEmail')?.value;
-    let password = this.loginForm.get('password')?.value;
-    if (this.authService.login(usernameEmail, password)) {
-      this.error_login_msg = undefined;
-      this.isLoggedIn = true;
-      let possibleUsername = this.authService.getUsername(usernameEmail, password)
-      this.username = possibleUsername ? possibleUsername : usernameEmail
-      this.closeModal(this.loginModal);
-    }
-    else {
-      this.error_login_msg = 'Incorrect username / email or password';
-      this.isLoggedIn = false;
-    }
+  hideRegisterModal(): void {
+    this.showRegisterModal = false;
   }
 
   logout(): void {
@@ -97,14 +47,10 @@ export class AppComponent {
     this.router.navigate(['/']);
   }
 
-  passwordMatchValidator(control: AbstractControl): { [key: string]: boolean } | null {
-    const password = control.get('password');
-    const confirmPassword = control.get('confirmPassword');
-
-    if (password?.value !== confirmPassword?.value) {
-      return { 'passwordMatch': true };
+  setConnected(username: any): void {
+    if (username) {
+      this.username = username;
+      this.isLoggedIn = true;
     }
-
-    return null;
   }
 }

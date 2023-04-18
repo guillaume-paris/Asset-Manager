@@ -1,0 +1,50 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Register</h1>
+        <button type="button" class="btn-close" (click)="closeModalHandler()"></button>
+      </div>
+      <form [formGroup]="registerForm" (ngSubmit)="register()" class="mt-4">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-control" formControlName="username">
+            <div *ngIf="registerForm.get('username')?.touched && registerForm.get('username')?.value === ''" class="text-danger">
+              <small class="text-danger">Please enter a username</small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email address</label>
+            <input type="text" class="form-control" formControlName="email">
+            <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.value === ''" class="text-danger">
+              <small class="text-danger">Please enter an email adress</small>
+            </div>
+            <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['email']" class="text-danger">
+              <small class="text-danger">Please enter a valid email adress</small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-control" formControlName="password">
+            <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.value === ''" class="text-danger">
+              <small class="text-danger">Please enter a password</small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Confirm Password</label>
+            <input type="password" class="form-control" formControlName="confirmPassword">
+            <div *ngIf="registerForm.hasError('passwordMatch') && registerForm.get('confirmPassword')?.touched" class="text-danger">
+              <small class="text-danger">Please enter the same password</small>
+            </div>
+          </div>
+          <div class="mb-3 text-center" *ngIf="error_login_msg">
+            <label class="text-danger">{{error_login_msg}}</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary mx-2" (click)="closeModalHandler()">Close</button>
+          <button class="btn btn-primary mx-2" type="submit">Register</button>
+        </div>
+      </form>
+    </div>
+</div>

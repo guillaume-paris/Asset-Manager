@@ -4,56 +4,52 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class AuthService {
-  isLoggedIn = false;
+  isLoggedIn: boolean;
   credentials = [{
     username: 'user',
     email: 'user@example.com',
     password: 'password'
   }];
 
+  constructor() {
+    this.isLoggedIn = false;
+  }
+
   isRouteAuthenticated(): boolean {
     return this.isLoggedIn;
   };
 
-  login(usernameEmail: string, password: string): boolean {
+  login(usernameEmail: string, password: string): string {
     if (this.isRouteAuthenticated()) {
-      throw new Error('Already logged in');
+      return ("");
     }
     let isCredentialsMatch = false;
+    let username: string = "";
     this.credentials.forEach(c => {
       if (c.email === usernameEmail || c.username === usernameEmail && c.password === password) {
-        isCredentialsMatch = true;
-      }
-    });
-    if (isCredentialsMatch) {
-      this.isLoggedIn = true;
-      return true;
-    }
-    return false;
-  }
-
-  getUsername(email: string, password: string): string {
-    if (!this.isLoggedIn) {
-      throw new Error('Not logged in');
-    }
-    let isCredentialsMatch = false;
-    let username = "";
-    this.credentials.forEach(c => {
-      if (c.email === email && c.password === password) {
         isCredentialsMatch = true;
         username = c.username;
       }
     });
     if (isCredentialsMatch) {
       this.isLoggedIn = true;
-      return username;
+      return (username);
     }
-    return "";
+    return ("");
   }
 
-  register(username: string, email: string, password: string): void {
+  register(username: string, email: string, password: string): string {
     if (this.isRouteAuthenticated()) {
-      throw new Error('Already logged in');
+      return ("")
+    }
+    let isCredentialsMatch = false;
+    this.credentials.forEach(c => {
+      if (c.email === email || c.username === username) {
+        isCredentialsMatch = true;
+      }
+    });
+    if (isCredentialsMatch) {
+      return ("")
     }
     this.credentials.push({
       username,
@@ -61,6 +57,7 @@ export class AuthService {
       password
     });
     this.isLoggedIn = true;
+    return ("username");
   }
 
   logout(): void {
