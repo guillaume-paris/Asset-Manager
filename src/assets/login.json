@@ -1,0 +1,7 @@
+{
+    "success": true,
+    "message": "You have login successfully.",
+    "username": "totoTestUser",
+    "token": "jwt-token",
+    "expires_in": "123" 
+}

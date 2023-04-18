@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
 import { GenericToastService } from './generic-toast.service';
+import { Observable, Subscription, throwError, of } from 'rxjs';
+import { catchError, retry } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { ILogin, IRegister } from '../models/auth.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +16,7 @@ export class AuthService {
     password: 'password'
   }];
 
-  constructor(private toastService: GenericToastService) {
+  constructor(private toastService: GenericToastService, private http: HttpClient) {
     this.isLoggedIn = false;
   }
 
@@ -20,48 +24,28 @@ export class AuthService {
     return this.isLoggedIn;
   };
 
-  login(usernameEmail: string, password: string): string {
-    if (this.isRouteAuthenticated()) {
-      return ("");
-    }
-    let isCredentialsMatch = false;
-    let username: string = "";
-    this.credentials.forEach(c => {
-      if (c.email === usernameEmail || c.username === usernameEmail && c.password === password) {
-        isCredentialsMatch = true;
-        username = c.username;
-      }
-    });
-    if (isCredentialsMatch) {
-      this.isLoggedIn = true;
-      this.toastService.showToast("Login successfull", "You have successfully logged into your account.", "success");
-      return (username);
-    }
-    this.toastService.showToast("Login failed", "Username, Email or Password are wrong", "danger");
-    return ("");
+  activateRoute(isLoggedIn: boolean): void {
+    this.isLoggedIn = isLoggedIn;
   }
 
-  register(username: string, email: string, password: string): string {
+  login(usernameEmail: string, password: string): Observable<ILogin> {
     if (this.isRouteAuthenticated()) {
-      return ("")
+      return of({ success: false, message: "Already connected", username: "", token: "", expires_in: 0 });
     }
-    let isCredentialsMatch = false;
-    this.credentials.forEach(c => {
-      if (c.email === email || c.username === username) {
-        isCredentialsMatch = true;
-      }
-    });
-    if (isCredentialsMatch) {
-      return ("")
+    let URL: string = "assets/login.json";
+    let body = JSON.stringify({ username: usernameEmail, password: password});
+    return this.http.get<ILogin>(URL);
+    // return this.http.post<ILogin>(URL, body);
+  }
+
+  register(username: string, email: string, password: string): Observable<IRegister> {
+    if (this.isRouteAuthenticated()) {
+      return of({ success: false, message: "Already connected", username: "", token: "", expires_in: 0 });
     }
-    this.credentials.push({
-      username,
-      email,
-      password
-    });
-    this.isLoggedIn = true;
-    this.toastService.showToast("Register successfully", "You have successfully created your account.", "success");
-    return ("username");
+    let URL: string = "assets/register.json";
+    let body = JSON.stringify({ username, email, password });
+    return this.http.get<IRegister>(URL);
+    // return this.http.post<ILogin>(URL, body);
   }
 
   logout(): void {

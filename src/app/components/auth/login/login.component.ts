@@ -1,6 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ILogin } from 'src/_shared/models/auth.model';
 import { AuthService } from 'src/_shared/services/auth.service';
+import { GenericToastService } from 'src/_shared/services/generic-toast.service';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +13,7 @@ export class LoginComponent implements OnInit {
   @Output() closeModal = new EventEmitter();
   @Output() setConnected = new EventEmitter<string>();
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private toastService: GenericToastService) { }
 
   ngOnInit(): void {
     this.error_login_msg = undefined;
@@ -31,14 +33,19 @@ export class LoginComponent implements OnInit {
     }
     let usernameEmail = this.loginForm.get('usernameEmail')?.value;
     let password = this.loginForm.get('password')?.value;
-    let username = this.authService.login(usernameEmail, password);
-    if (username) {
-      this.error_login_msg = undefined;
-      this.setConnected.emit(username);
-      this.closeModalHandler(true);
-    } else {
-      this.error_login_msg = 'Incorrect username / email or password';
-    }
+    this.authService.login(usernameEmail, password).subscribe((data: ILogin) => {
+      console.log(data);
+      if (data.success) {
+        this.error_login_msg = undefined;
+        this.toastService.showToast("Login successfull", data.message, "success");
+        this.authService.activateRoute(true);
+        this.setConnected.emit(data.username);
+        this.closeModalHandler(true);
+      } else {
+        this.toastService.showToast("Login failed", data.message, "danger");
+        this.error_login_msg = data.message;
+      }
+    });
   }
 
   closeModalHandler(isConnected: boolean = false): void {
