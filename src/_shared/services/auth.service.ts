@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { GenericToastService } from './generic-toast.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ export class AuthService {
     password: 'password'
   }];
 
-  constructor() {
+  constructor(private toastService: GenericToastService) {
     this.isLoggedIn = false;
   }
 
@@ -33,8 +34,10 @@ export class AuthService {
     });
     if (isCredentialsMatch) {
       this.isLoggedIn = true;
+      this.toastService.showToast("Login successfull", "You have successfully logged into your account.", "success");
       return (username);
     }
+    this.toastService.showToast("Login failed", "Username, Email or Password are wrong", "danger");
     return ("");
   }
 
@@ -57,10 +60,12 @@ export class AuthService {
       password
     });
     this.isLoggedIn = true;
+    this.toastService.showToast("Register successfully", "You have successfully created your account.", "success");
     return ("username");
   }
 
   logout(): void {
     this.isLoggedIn = false;
+    this.toastService.showToast("Logout successfully", "You are no longer connected to your account.", "success");
   }
 }

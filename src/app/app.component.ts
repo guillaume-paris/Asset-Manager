@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
   isLoggedIn: boolean = false;
   username: string | undefined;
   
-  constructor(private authService: AuthService, private router: Router, public toastService: GenericToastService) { }
+  constructor(private authService: AuthService, private router: Router, private toastService: GenericToastService) { }
   
   ngOnInit(): void {
     const toastTrigger = document.getElementById('liveToastBtn')

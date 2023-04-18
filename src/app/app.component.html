@@ -8,21 +8,21 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item pb-1 px-1">
-          <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+          <a class="nav-link ps-2" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
         </li>
         <li class="nav-item pb-1 px-1" *ngIf="isLoggedIn">
-          <a class="nav-link" routerLink="/user" routerLinkActive="active">User</a>
+          <a class="nav-link ps-2" routerLink="/user" routerLinkActive="active">User</a>
         </li>
         <li class="nav-item pb-1 px-1" *ngIf="isLoggedIn">
-          <a class="nav-link" routerLink="/asset" routerLinkActive="active">Asset</a>
+          <a class="nav-link ps-2" routerLink="/asset" routerLinkActive="active">Asset</a>
         </li>
         <li class="nav-item pb-1 px-1" *ngIf="isLoggedIn">
-          <a class="nav-link" routerLink="/asset-management" routerLinkActive="active">Asset management</a>
+          <a class="nav-link ps-2" routerLink="/asset-management" routerLinkActive="active">Asset management</a>
         </li>
       </ul>
       <ul class="navbar-nav">
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link dropdown-toggle ps-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             {{ username ? username : "Account" }}
           </a>
           <ul class="dropdown-menu dropdown-menu-right">
