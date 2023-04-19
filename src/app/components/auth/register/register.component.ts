@@ -43,7 +43,6 @@ export class RegisterComponent {
     let email = this.registerForm.get('email')?.value;
     let password = this.registerForm.get('password')?.value;
     this.authService.register(username, email, password).subscribe((data: IRegister) => {
-      console.log(data);
       if (data.success) {
         this.error_login_msg = undefined;
         this.toastService.showToast("Register successfull", data.message, "success");

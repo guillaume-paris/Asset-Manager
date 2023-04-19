@@ -46,7 +46,7 @@ export class UpdateAssetComponent implements OnInit {
       this.editAssetForm.markAllAsTouched();
       return;
     }
-    let newAsset: IGenericTableRow = {
+    const updatedAsset: IGenericTableRow = {
       values: [
         this.editAssetForm.value.name,
         this.editAssetForm.value.description,
@@ -57,11 +57,18 @@ export class UpdateAssetComponent implements OnInit {
       ],
       id: this.row.id
     }
-    if (!this.assetService.updateAsset(this.row.id, newAsset)) {
-      this.toastService.showToast('Oops, an error occured', 'Sorry, an error occured, try again later', 'danger');
-    }
-    this.toastService.showToast('Edit succesfully','User has been edited successfully','success');
-    this.hideModal();
-    this.update.emit();
+    
+    this.assetService.updateAsset(this.row.id, updatedAsset)
+      .subscribe(res => {
+        if (!res.success) {
+          this.toastService.showToast(res.title, res.message, 'danger');
+        }
+        else {
+          this.toastService.showToast(res.title, res.message, 'success');
+          this.hideModal();
+          this.update.emit();
+        }
+      }
+    );
   }
 }

@@ -17,42 +17,5 @@
             "isActive": true
         }
     ],
-    "rows": [
-        {
-            "values": [
-                "Françis",
-                "Lalanne",
-                "francis.lalanne@gmail.com",
-                "Administrator"
-            ],
-            "id": 0
-        },
-        {
-            "values": [
-                "Marcel",
-                "Pignon",
-                "m.pignong@gmail.com",
-                "Director"
-            ],
-            "id": 1
-        },
-        {
-            "values": [
-                "Marco",
-                "Polo",
-                "marcopolo@gmail.com",
-                "Employee"
-            ],
-            "id": 2
-        },
-        {
-            "values": [
-                "Paul",
-                "Leboeuf",
-                "P.lebouef@gmail.com",
-                "Employee"
-            ],
-            "id": 3
-        }
-    ]
+    "rows": []
 }

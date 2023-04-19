@@ -37,12 +37,10 @@ export class UpdateAssetManagementComponent implements OnInit {
       id: this.row.id
     }
     this.assets.push(currentObject);
-    console.log('assets when load the component: ', this.assets);
   }
 
   refreshAssetsForUser(): void {
     this.assets = this.assetManagementService.getAssetsForUser(this.editAssetManagementForm.value.user);
-    console.log('assets: ', this.assets);
   }
 
   hideModal(): void {
@@ -62,11 +60,18 @@ export class UpdateAssetManagementComponent implements OnInit {
       ],
       id: this.row.id
     }
-    if (!this.assetManagementService.updateAssetManagement(this.row.id, newAssetManagement)) {
-      this.toastService.showToast('Oops, an error occured', 'Sorry, an error occured, try again later', 'danger');
-    }
-    this.toastService.showToast('Edit succesfully','User has been edited successfully','success');
-    this.hideModal();
-    this.update.emit();
+    
+    this.assetManagementService.updateAssetManagement(this.row.id, newAssetManagement)
+      .subscribe(res => {
+        if (!res.success) {
+          this.toastService.showToast(res.title, res.message, 'danger');
+        }
+        else {
+          this.toastService.showToast(res.title, res.message, 'success');
+          this.hideModal();
+          this.update.emit();
+        }
+      }
+    );
   }
 }

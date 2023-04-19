@@ -42,7 +42,7 @@ export class CreateUserComponent {
       this.createUserForm.markAllAsTouched();
       return;
     }
-    let newUser: IGenericTableRow = {
+    const newUser: IGenericTableRow = {
       values: [
         this.createUserForm.value.firstName,
         this.createUserForm.value.lastName,
@@ -51,11 +51,18 @@ export class CreateUserComponent {
       ],
       id: 0
     }
-    if (!this.userService.createUser(newUser)) {
-      this.toastService.showToast('Oops, an error occured', 'Sorry, an error occured, try again later', 'danger');
-    }
-    this.toastService.showToast('Add successfully','User has been added succesfully','success');
-    this.hideModal();
-    this.create.emit();
+
+    this.userService.createUser(newUser)
+      .subscribe(res => {
+        if (!res.success) {
+          this.toastService.showToast(res.title, res.message, 'danger');
+        }
+        else {
+          this.toastService.showToast(res.title, res.message, 'success');
+          this.hideModal();
+          this.create.emit();
+        }
+      }
+    );
   }
 }

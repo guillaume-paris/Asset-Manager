@@ -1,51 +1,73 @@
 import { Injectable } from '@angular/core';
 import { IGenericTable, IGenericTableRow } from '../models/generic-crud-table.model';
 import data from '../../app/config/asset.config.json'
+import { IResponse } from '../models/api.model';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { IAsset } from '../models/asset.model';
 
 @Injectable()
 export class AssetService {
 
   assets: IGenericTable;
 
-  constructor() {
+  constructor(private http: HttpClient) {
     // Load data from the json file
     this.assets = data;
   }
 
   getAssets(): IGenericTable {
+    const URL: string = "assets/asset/getAssets.json";
+    const assets: IGenericTableRow[] = [];
+
+    this.http.get<IAsset>(URL).subscribe((data: IAsset) => {
+      data.assets.forEach((asset) => {
+        const rowAsset: IGenericTableRow = {
+          values: [asset.name, asset.description, asset.brand, asset.price, asset.quantity, asset.category],
+          id: asset.id
+        }
+        assets.push(rowAsset);
+      })
+    });
+    this.assets.rows = assets;
     return this.assets;
   }
-
-  getAsset(id: number): IGenericTableRow {
-    return this.assets.rows.find(user => user.id === id)!;
-  }
   
-  createAsset(newAsset: IGenericTableRow): boolean {
-    const newId = this.assets.rows.length + 1;
-    if (!this.assets.rows.push({ ...newAsset, id: newId })) {
-      return false;
-    }
-    return true;
+  createAsset(newAsset: IGenericTableRow): Observable<IResponse> {
+    const URL: string = "assets/asset/createAsset.json";
+    const body = JSON.stringify({ 
+      name: newAsset.values[0],
+      description: newAsset.values[1],
+      brand: newAsset.values[2],
+      price: newAsset.values[3],
+      quantiy: newAsset.values[4],
+      category: newAsset.values[5]
+    });
+    
+    return this.http.get<IResponse>(URL);
   }
 
-  updateAsset(id: number, updatedAsset: IGenericTableRow): boolean {
-    const userIndex = this.assets.rows.findIndex(user => user.id === id);
-    if (userIndex === -1) {
-      return false;
-    }
-    this.assets.rows[userIndex] = {
-    ...this.assets.rows[userIndex],
-    ...updatedAsset
-    };
-    return true;
+  updateAsset(id: number, updatedAsset: IGenericTableRow): Observable<IResponse> {
+    const URL: string = "assets/asset/updateAsset.json";
+    const body = JSON.stringify({ 
+      name: updatedAsset.values[0],
+      description: updatedAsset.values[1],
+      brand: updatedAsset.values[2],
+      price: updatedAsset.values[3],
+      quantiy: updatedAsset.values[4],
+      category: updatedAsset.values[5],
+      id: id,
+    });
+  
+    return this.http.get<IResponse>(URL);
   }
 
-  deleteAsset(id: number): boolean {
-    const userIndex = this.assets.rows.findIndex(user => user.id === id);
-    if (userIndex === -1) {
-      return false;
-    }
-    this.assets.rows.splice(userIndex, 1);
-    return true;
+  deleteAsset(id: number): Observable<IResponse> {
+    const URL: string = "assets/asset/deleteAsset.json";
+    const body = JSON.stringify({ 
+      id: id,
+    });
+
+    return this.http.get<IResponse>(URL);
   }
 }

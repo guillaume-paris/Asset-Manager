@@ -3,30 +3,38 @@ import { IGenericTable, IGenericTableRow } from '../models/generic-crud-table.mo
 import data from '../../app/config/asset.management.config.json'
 import { AssetService } from './asset.service';
 import { UserService } from './user.service';
+import { IAssetManagement } from '../models/asset.management.model';
+import { HttpClient } from '@angular/common/http';
+import { IResponse } from '../models/api.model';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class AssetManagementService {
 
-  assetManagement: IGenericTable;
+  assetsManagement: IGenericTable;
   assets: IGenericTable;
   users: IGenericTable;
 
-  constructor(private assetService: AssetService, private userService: UserService) {
+  constructor(private assetService: AssetService, private userService: UserService, private http: HttpClient) {
     // Load data from the json file
-    this.assetManagement = data;
+    this.assetsManagement = data;
     this.assets = assetService.getAssets();
     this.users = userService.getUsers();
   }
 
   getUsers(): IGenericTable {
-    return this.users;
+    return this.userService.getUsers();
+  }
+
+  getAssets(): IGenericTableRow[] {
+    return this.assetService.getAssets().rows;
   }
 
   getAssetsForUser(user: string): IGenericTableRow[] {
     let assetsOfUser: string[] = [];
     let assetsAvailable: IGenericTableRow[] = [];
     if (user) {
-      this.assetManagement.rows.filter(row => {
+      this.assetsManagement.rows.filter(row => {
         if (row.values[0] === user)
           assetsOfUser.push(row.values[1])
       });
@@ -38,38 +46,50 @@ export class AssetManagementService {
     return assetsAvailable;
   }
 
-  getAssets(): IGenericTableRow[] {
-    return this.assets.rows;
-  }
+  getAssetsManagement(): IGenericTable {
+    const URL: string = "assets/asset-management/getAssetsManagement.json";
+    const assetsManagement: IGenericTableRow[] = [];
 
-  getAssetManagement(): IGenericTable {
-    return this.assetManagement;
+    this.http.get<IAssetManagement>(URL).subscribe((data: IAssetManagement) => {
+      data.assetsManagement.forEach((assetManagement) => {
+        const rowAssetManagement: IGenericTableRow = {
+          values: [assetManagement.user, assetManagement.asset],
+          id: assetManagement.id
+        }
+        assetsManagement.push(rowAssetManagement);
+      })
+    });
+    this.assetsManagement.rows = assetsManagement;
+    return this.assetsManagement;
   }
   
-  createAssetManagement(newAssetManagement: IGenericTableRow): boolean {
-    const newId = this.assetManagement.rows.length + 1;
-    this.assetManagement.rows.push({ ...newAssetManagement, id: newId });
-    return true;
+  createAssetManagement(newAssetManagement: IGenericTableRow): Observable<IResponse> {
+    const URL: string = "assets/asset-management/createAssetManagement.json";
+    const body = JSON.stringify({ 
+      user: newAssetManagement.values[0],
+      asset: newAssetManagement.values[1],
+    });
+    
+    return this.http.get<IResponse>(URL);
   }
 
-  updateAssetManagement(id: number, newAssetManagement: IGenericTableRow): boolean {
-    const userIndex = this.assetManagement.rows.findIndex(assetManagement => assetManagement.id === id);
-    if (userIndex === -1) {
-      return false;
-    }
-    this.assetManagement.rows[userIndex] = {
-      ...this.assetManagement.rows[userIndex],
-      ...newAssetManagement
-    };
-    return true;
+  updateAssetManagement(id: number, newAssetManagement: IGenericTableRow): Observable<IResponse> {
+    const URL: string = "assets/asset-management/updateAssetManagement.json";
+    const body = JSON.stringify({ 
+      user: newAssetManagement.values[0],
+      asset: newAssetManagement.values[1],
+      id: id,
+    });
+  
+    return this.http.get<IResponse>(URL);
   }
 
-  deleteAssetManagement(id: number): boolean {
-    const userIndex = this.assetManagement.rows.findIndex(assetManagement => assetManagement.id === id);
-    if (userIndex === -1) {
-      return false;
-    }
-    this.assetManagement.rows.splice(userIndex, 1);
-    return true;
+  deleteAssetManagement(id: number): Observable<IResponse> {
+    const URL: string = "assets/asset-management/deleteAssetManagement.json";
+    const body = JSON.stringify({ 
+      id: id,
+    });
+
+    return this.http.get<IResponse>(URL);
   }
 }

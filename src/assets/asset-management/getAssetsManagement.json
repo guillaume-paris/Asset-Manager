@@ -1,0 +1,19 @@
+{
+    "assetsManagement": [
+        {
+            "user": "Francis Lalanne",
+            "asset": "Iphone 14",
+            "id": 0
+        },
+        {
+            "user": "Francis Lalanne",
+            "asset": "Bag",
+            "id": 1
+        },
+        {
+            "user": "Marco Polo",
+            "asset": "Bag",
+            "id": 2
+        }
+    ]
+}

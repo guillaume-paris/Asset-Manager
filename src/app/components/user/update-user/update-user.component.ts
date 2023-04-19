@@ -52,7 +52,7 @@ export class UpdateUserComponent implements OnInit {
       this.editUserForm.markAllAsTouched();
       return;
     }
-    let newUser: IGenericTableRow = {
+    const updatedUser: IGenericTableRow = {
       values: [
         this.editUserForm.value.firstName,
         this.editUserForm.value.lastName,
@@ -61,11 +61,18 @@ export class UpdateUserComponent implements OnInit {
       ],
       id: this.row.id
     }
-    if (!this.userService.updateUser(this.row.id, newUser)) {
-      this.toastService.showToast('Oops, an error occured', 'Sorry, an error occured, try again later', 'danger');
-    }
-    this.toastService.showToast('Edit succesfully','User has been edited successfully','success');
-    this.hideModal();
-    this.update.emit();
+  
+    this.userService.updateUser(this.row.id, updatedUser)
+      .subscribe(res => {
+        if (!res.success) {
+          this.toastService.showToast(res.title, res.message, 'danger');
+        }
+        else {
+          this.toastService.showToast(res.title, res.message, 'success');
+          this.hideModal();
+          this.update.emit();
+        }
+      }
+    );
   }
 }

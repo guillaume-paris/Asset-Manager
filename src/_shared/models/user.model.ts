@@ -1,11 +1,11 @@
 export interface IUser {
-    id: number
+    users: [
+        {
+            firstname: string;
+            lastname: string;
+            email: string;
+            role: string;
+            id: number;
+        }
+    ]
 }
-
-export interface User extends IUser {
-    firstName: string,
-    lastName: string,
-    email: string,
-    role: string
-}
-  

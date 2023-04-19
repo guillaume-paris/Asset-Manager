@@ -1,53 +1,69 @@
 import { Injectable } from '@angular/core';
-import { User } from '../models/user.model';
+import { IUser } from '../models/user.model';
 import { IGenericTable, IGenericTableRow } from '../models/generic-crud-table.model';
 import data from '../../app/config/user.config.json'
+import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
+import { IResponse } from '../models/api.model';
 
 @Injectable()
 export class UserService {
 
   users: IGenericTable;
 
-  constructor() {
+  constructor(private http: HttpClient) {
     // Load data from the json file
     this.users = data;
   }
 
   getUsers(): IGenericTable {
+    const URL: string = "assets/user/getUsers.json";
+    const users: IGenericTableRow[] = [];
+
+    this.http.get<IUser>(URL).subscribe((data: IUser) => {
+      data.users.forEach((user) => {
+        const rowUser: IGenericTableRow = {
+          values: [user.firstname, user.lastname, user.email, user.role],
+          id: user.id
+        }
+        users.push(rowUser);
+      })
+    });
+    this.users.rows = users;
     return this.users;
   }
-
-  getUser(id: number): IGenericTableRow {
-    return this.users.rows.find(user => user.id === id)!;
-  }
   
-  createUser(newUser: IGenericTableRow): boolean {
-    if (this.users.rows.find(user => user.values[2] === newUser.values[2])) {
-      return false;
-    }
-    const newId = this.users.rows.length + 1;
-    this.users.rows.push({ ...newUser, id: newId });
-    return true;
+  createUser(newUser: IGenericTableRow): Observable<IResponse> {
+    const URL: string = "assets/user/createUser.json";
+    const body = JSON.stringify({ 
+      firstname: newUser.values[0],
+      lastname: newUser.values[1],
+      email: newUser.values[2],
+      role: newUser.values[3]
+    });
+    
+    return this.http.get<IResponse>(URL);
   }
 
-  updateUser(id: number, updatedUser: IGenericTableRow): boolean {
-    const userIndex = this.users.rows.findIndex(user => user.id === id);
-    if (userIndex === -1) {
-      return false;
-    }
-    this.users.rows[userIndex] = {
-      ...this.users.rows[userIndex],
-      ...updatedUser
-    };
-    return true;
+  updateUser(id: number, updatedUser: IGenericTableRow): Observable<IResponse> {
+    const URL: string = "assets/user/updateUser.json";
+    const body = JSON.stringify({ 
+      firstname: updatedUser.values[0],
+      lastname: updatedUser.values[1],
+      email: updatedUser.values[2],
+      role: updatedUser.values[3],
+      id: id,
+    });
+  
+    return this.http.get<IResponse>(URL);
   }
 
-  deleteUser(id: number): boolean {
-    const userIndex = this.users.rows.findIndex(user => user.id === id);
-    if (userIndex === -1) {
-      return false;
-    }
-    this.users.rows.splice(userIndex, 1);
-    return true;
+  deleteUser(id: number): Observable<IResponse> {
+    const URL: string = "assets/user/deleteUser.json";
+    const body = JSON.stringify({ 
+      id: id,
+    });
+
+    return this.http.get<IResponse>(URL);
   }
 }

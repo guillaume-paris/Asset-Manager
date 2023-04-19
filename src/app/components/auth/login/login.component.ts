@@ -34,7 +34,6 @@ export class LoginComponent implements OnInit {
     let usernameEmail = this.loginForm.get('usernameEmail')?.value;
     let password = this.loginForm.get('password')?.value;
     this.authService.login(usernameEmail, password).subscribe((data: ILogin) => {
-      console.log(data);
       if (data.success) {
         this.error_login_msg = undefined;
         this.toastService.showToast("Login successfull", data.message, "success");

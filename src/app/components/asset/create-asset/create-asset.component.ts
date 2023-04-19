@@ -34,7 +34,7 @@ export class CreateAssetComponent {
       this.createAssetForm.markAllAsTouched();
       return;
     }
-    let newAsset: IGenericTableRow = {
+    const newAsset: IGenericTableRow = {
       values: [
         this.createAssetForm.value.name,
         this.createAssetForm.value.description,
@@ -45,11 +45,18 @@ export class CreateAssetComponent {
       ],
       id: 0
     }
-    if (!this.assetService.createAsset(newAsset)) {
-      this.toastService.showToast('Oops, an error occured', 'Sorry, an error occured, try again later', 'danger');
-    }
-    this.toastService.showToast('Edit succesfully','User has been edited successfully','success');
-    this.hideModal();
-    this.create.emit();
+    
+    this.assetService.createAsset(newAsset)
+      .subscribe(res => {
+        if (!res.success) {
+          this.toastService.showToast(res.title, res.message, 'danger');
+        }
+        else {
+          this.toastService.showToast(res.title, res.message, 'success');
+          this.hideModal();
+          this.create.emit();
+        }
+      }
+    );
   }
 }

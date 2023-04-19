@@ -20,11 +20,17 @@ export class DeleteAssetComponent {
   }
 
   onDelete(): void {
-    if (!this.assetService.deleteAsset(this.row.id)) {
-      this.toastService.showToast('Oops, an error occured', 'Sorry, an error occured, try again later', 'danger');
-    }
-    this.toastService.showToast('Delete succesfully','User has been deleted successfully','success');
-    this.hideModal();
-    this.delete.emit();
+    this.assetService.deleteAsset(this.row.id)
+      .subscribe(res => {
+        if (!res.success) {
+          this.toastService.showToast(res.title, res.message, 'danger');
+        }
+        else {
+          this.toastService.showToast(res.title, res.message, 'success');
+          this.hideModal();
+          this.delete.emit();
+        }
+      }
+    );
   }
 }

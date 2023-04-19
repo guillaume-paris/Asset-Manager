@@ -17,7 +17,7 @@ export class AssetManagementComponent {
   deleteModal: boolean = false;
 
   constructor(private assetManagementService: AssetManagementService, private toastService: GenericToastService) {
-    this.assetManagement = assetManagementService.getAssetManagement();
+    this.assetManagement = assetManagementService.getAssetsManagement();
   }
 
   toggleCreateModal(): void {
@@ -33,14 +33,14 @@ export class AssetManagementComponent {
   }
 
   deleteAssetManagement(): void {
-    this.assetManagement = this.assetManagementService.getAssetManagement();
+    this.assetManagement = this.assetManagementService.getAssetsManagement();
   }
 
   updateAssetManagement(): void {
-    this.assetManagement = this.assetManagementService.getAssetManagement();
+    this.assetManagement = this.assetManagementService.getAssetsManagement();
   }
 
   createAssetManagement(): void {
-    this.assetManagement = this.assetManagementService.getAssetManagement();
+    this.assetManagement = this.assetManagementService.getAssetsManagement();
   }
 }

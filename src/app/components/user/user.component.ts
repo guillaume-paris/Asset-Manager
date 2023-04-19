@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { GenericToastService } from 'src/_shared/services/generic-toast.service';
 import { UserService } from 'src/_shared/services/user.service';
-import { User } from 'src/_shared/models/user.model';
 import { IGenericTable, IGenericTableRow } from 'src/_shared/models/generic-crud-table.model';
+import { IUser } from 'src/_shared/models/user.model';
 
 @Component({
   selector: 'app-user',

@@ -17,7 +17,7 @@ export class AuthService {
   }];
 
   constructor(private toastService: GenericToastService, private http: HttpClient) {
-    this.isLoggedIn = false;
+    this.isLoggedIn = true;
   }
 
   isRouteAuthenticated(): boolean {
