@@ -36,14 +36,18 @@ export class LoginComponent implements OnInit {
     this.authService.login(usernameEmail, password).subscribe((data: ILogin) => {
       if (data.success) {
         this.error_login_msg = undefined;
-        this.toastService.showToast("Login successfull", data.message, "success");
+        this.toastService.showToast(data.title, data.message, "success");
         this.authService.activateRoute(true);
         this.setConnected.emit(data.username);
         this.closeModalHandler(true);
       } else {
-        this.toastService.showToast("Login failed", data.message, "danger");
+        this.toastService.showToast(data.title, data.message, "danger");
         this.error_login_msg = data.message;
       }
+    }, (error) => {
+      const data: ILogin = error.error;
+      this.toastService.showToast(data.title, data.message, "danger");
+      this.error_login_msg = data.message;
     });
   }
 

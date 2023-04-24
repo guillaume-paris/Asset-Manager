@@ -45,14 +45,18 @@ export class RegisterComponent {
     this.authService.register(username, email, password).subscribe((data: IRegister) => {
       if (data.success) {
         this.error_login_msg = undefined;
-        this.toastService.showToast("Register successfull", data.message, "success");
+        this.toastService.showToast(data.title, data.message, "success");
         this.authService.activateRoute(true);
         this.setConnected.emit(data.username);
         this.closeModalHandler(true);
       } else {
-        this.toastService.showToast("Register failed", data.message, "danger");
+        this.toastService.showToast(data.title, data.message, "danger");
         this.error_login_msg = data.message;
       }
+    }, (error) => {
+      const data: IRegister = error.error;
+      this.toastService.showToast(data.title, data.message, "danger");
+      this.error_login_msg = data.message;
     });
   }
 

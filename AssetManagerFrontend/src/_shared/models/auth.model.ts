@@ -1,5 +1,6 @@
 export interface ILogin {
     success: boolean;
+    title: string;
     message: string;
     username: string;
     token: string;
@@ -8,6 +9,7 @@ export interface ILogin {
 
 export interface IRegister {
     success: boolean;
+    title: string;
     message: string;
     username: string;
     token: string;
