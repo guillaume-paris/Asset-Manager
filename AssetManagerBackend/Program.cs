@@ -26,7 +26,7 @@ builder.Services.AddCors(options =>
         });
 });
 
-/*builder.Services.AddScoped<IUserAccountRepository, UserAccountRepository>();*/
+builder.Services.AddScoped<IUserAccountRepository, UserAccountRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 // Add EF Core DbContext to the container with in-memory database
 builder.Services.AddDbContext<AssetManagerDbContext>(options =>

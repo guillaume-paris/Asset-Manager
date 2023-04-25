@@ -8,9 +8,9 @@ namespace AssetManagerBackend.Controllers
     [ApiController]
     public class UserAccountsController : ControllerBase
     {
-        private readonly IRepository<UserAccount> _repository;
+        private readonly IUserAccountRepository _repository;
 
-        public UserAccountsController(IRepository<UserAccount> repository)
+        public UserAccountsController(IUserAccountRepository repository)
         {
             _repository = repository;
         }
@@ -21,11 +21,11 @@ namespace AssetManagerBackend.Controllers
             return _repository.GetAll().ToList();
         }
 
-        [HttpGet("login")]
-        public async Task<IActionResult> IsUserAccountExist(UserAccount usrAcnt)
+        [HttpPost("login")]
+        public async Task<IActionResult> IsUserAccountExist(DTO.DTO.Login login)
         {
-            var res = await _repository.Exists(usrAcnt.Id);
-            if (res == false)
+            UserAccount? userAccount = await _repository.IsUserAccountExist(login.Username!, login.Email!, login.Password!);
+            if (userAccount == null)
             {
                 return NotFound(new DTO.DTO.ActionResult
                 {
@@ -37,9 +37,9 @@ namespace AssetManagerBackend.Controllers
             return Ok(new DTO.DTO.LoginResult
             {
                 Success = true,
-                Title = "Creation successful",
-                Message = "You have created a new user account.",
-                Username = usrAcnt.Username,
+                Title = "Login successful",
+                Message = "You have log into your account successfully.",
+                Username = userAccount.Username,
                 Token = "test-token",
                 ExpiresIn = 0
             });
@@ -85,11 +85,14 @@ namespace AssetManagerBackend.Controllers
                     Message = "Oops, something went wrong server side. Please try again later."
                 });
             }
-            return Ok(new DTO.DTO.ActionResult
+            return Ok(new DTO.DTO.LoginResult
             {
                 Success = true,
                 Title = "Creation successful",
-                Message = "You have created a new user account."
+                Message = "You have created a new user account.",
+                Username = usrAcnt.Username,
+                Token = "test-token-register",
+                ExpiresIn = 0
             });
         }
 

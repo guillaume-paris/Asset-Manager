@@ -40,6 +40,8 @@ namespace AssetManagerBackend.Repositories
 
         public async Task<int> Create(TEntity entity)
         {
+            int id = await _context.Set<TEntity>().CountAsync();
+            entity.Id = id + 1;
             await _context.Set<TEntity>().AddAsync(entity);
 
             await _context.SaveChangesAsync();

@@ -34,7 +34,6 @@ export class AuthService {
     }
     let URL: string = "http://localhost:61150/api/UserAccounts/login";
     let body = JSON.stringify({
-      "Id": 0,
       "Username": usernameEmail,
       "Email": usernameEmail,
       "Password": password
