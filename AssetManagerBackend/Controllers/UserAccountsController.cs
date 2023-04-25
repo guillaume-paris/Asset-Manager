@@ -1,7 +1,6 @@
-﻿using AssetManagerBackend.Models;
-using Microsoft.AspNetCore.Http;
+﻿using AssetManagerBackend.Interfaces;
+using AssetManagerBackend.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace AssetManagerBackend.Controllers
 {
@@ -9,113 +8,110 @@ namespace AssetManagerBackend.Controllers
     [ApiController]
     public class UserAccountsController : ControllerBase
     {
-        private readonly AssetManagementDbContext _context;
+        private readonly IRepository<UserAccount> _repository;
 
-        private class LoginResult
+        public UserAccountsController(IRepository<UserAccount> repository)
         {
-            public bool Success { get; set; }
-            public string? Title { get; set; }
-            public string? Message { get; set; }
-            public string? Username { get; set; }
-            public string? Token { get; set; }
-            public int? ExpiresIn { get; set; }
-        }
-
-        public UserAccountsController(AssetManagementDbContext context)
-        {
-            _context = context;
+            _repository = repository;
         }
 
         [HttpGet]
         public List<UserAccount> GetUserAccounts()
         {
-            return _context.UserAccounts.ToList();
+            return _repository.GetAll().ToList();
         }
 
-        [HttpGet("{id}")]
-        public UserAccount GetUserAccount(int id)
+        [HttpGet("login")]
+        public async Task<IActionResult> IsUserAccountExist(UserAccount usrAcnt)
         {
-            return _context.UserAccounts.SingleOrDefault(e => e.Id == id)!;
-        }
-
-        [HttpPost("login")]
-        public IActionResult IsUserAccountExist(UserAccount usrAccnt) 
-        {
-            var usrAcnt = _context.UserAccounts.SingleOrDefault(d => (d.Username == usrAccnt.Username && d.Password == usrAccnt.Password) || (d.Email == usrAccnt.Email && d.Password == usrAccnt.Password));
-            if (usrAcnt == null)
+            var res = await _repository.Exists(usrAcnt.Id);
+            if (res == false)
             {
-                return NotFound(new LoginResult
-                {
-                    Success = false,
-                    Title = "Incorrect credentials",
-                    Message = "User credentials is not matching with an existing one.",
-                    Username = string.Empty,
-                    Token = string.Empty,
-                    ExpiresIn = 0
-                });
-            }
-            return Ok(new LoginResult
-            {
-                Success = true,
-                Title = "Login successful",
-                Message = "You have log in to your account.",
-                Username = usrAcnt.Username,
-                Token = "test-token",
-                ExpiresIn = 12000
-            });
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult DeleteUserAccount(int id)
-        {
-            var usrAccnt = _context.UserAccounts.SingleOrDefault(d => d.Id == id);
-            if (usrAccnt == null)
-            {
-                return NotFound(new LoginResult
+                return NotFound(new DTO.DTO.ActionResult
                 {
                     Success = false,
                     Title = "Something went wrong",
-                    Message = "Oops, something went wrong server side. Please try again later.",
-                    Username = string.Empty,
-                    Token = string.Empty,
-                    ExpiresIn = 0
+                    Message = "Oops, something went wrong server side. Please try again later."
                 });
             }
-            _context.UserAccounts.Remove(usrAccnt);
-            _context.SaveChanges();
-            return Ok("UserAccount with the id: " + id + " has been deleted successfully");
+            return Ok(new DTO.DTO.LoginResult
+            {
+                Success = true,
+                Title = "Creation successful",
+                Message = "You have created a new user account.",
+                Username = usrAcnt.Username,
+                Token = "test-token",
+                ExpiresIn = 0
+            });
+        }
+
+        [HttpGet("{id}")]
+        public async Task<UserAccount?> GetUserAccount(int id)
+        {
+            return await _repository.GetById(id);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUserAccount(int id)
+        {
+            var res = await _repository.Delete(id);
+            if (res == -1)
+            {
+                return NotFound(new DTO.DTO.ActionResult
+                {
+                    Success = false,
+                    Title = "Something went wrong",
+                    Message = "Oops, something went wrong server side. Please try again later."
+                });
+            }
+            return Ok(new DTO.DTO.ActionResult
+            {
+                Success = true,
+                Title = "Deletion successful",
+                Message = "You have deleted a user account."
+            });
         }
 
         [HttpPost]
-        public IActionResult AddUserAccount(UserAccount usrAccnt)
+        public async Task<IActionResult> AddUserAccount(UserAccount usrAcnt)
         {
-            if (_context.UserAccounts.Add(usrAccnt) == null)
+            var res = await _repository.Create(usrAcnt);
+            if (res == -1)
             {
-                
+                return NotFound(new DTO.DTO.ActionResult
+                {
+                    Success = false,
+                    Title = "Something went wrong",
+                    Message = "Oops, something went wrong server side. Please try again later."
+                });
             }
-            _context.SaveChanges();
-            return Ok(new LoginResult
+            return Ok(new DTO.DTO.ActionResult
             {
                 Success = true,
-                Title = "Register successful",
-                Message = "You have created successfully a new account.",
-                Username = usrAccnt.Username,
-                Token = "test-token",
-                ExpiresIn = 12000
+                Title = "Creation successful",
+                Message = "You have created a new user account."
             });
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateUserAccount(int id)
+        public async Task<IActionResult> UpdateUserAccount(int id)
         {
-            var usrAcnt = _context.UserAccounts.SingleOrDefault(d => d.Id == id);
-            if (usrAcnt == null)
+            var res = await _repository.Update(id);
+            if (res == -1)
             {
-                return NotFound("UserAccount with the id: " + id + " does not exist");
+                return NotFound(new DTO.DTO.ActionResult
+                {
+                    Success = false,
+                    Title = "Something went wrong",
+                    Message = "Oops, something went wrong server side. Please try again later."
+                });
             }
-            _context.Update(usrAcnt);
-            _context.SaveChanges();
-            return Ok("UserAccount with the id: " + id + "has been updated successfully");
+            return Ok(new DTO.DTO.ActionResult
+            {
+                Success = true,
+                Title = "Update successful",
+                Message = "You have updated a user account."
+            });
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using AssetManagerBackend.Models;
-using Microsoft.AspNetCore.Http;
+﻿using AssetManagerBackend.Interfaces;
+using AssetManagerBackend.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssetManagerBackend.Controllers
@@ -8,57 +8,86 @@ namespace AssetManagerBackend.Controllers
     [ApiController]
     public class AssetsController : ControllerBase
     {
-        private readonly AssetManagementDbContext _context;
+        private readonly IRepository<Asset> _repository;
 
-        public AssetsController(AssetManagementDbContext context)
+        public AssetsController(IRepository<Asset> repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         [HttpGet]
         public List<Asset> GetAssets()
         {
-            return _context.Assets.ToList();
+            return _repository.GetAll().ToList();
         }
 
         [HttpGet("{id}")]
-        public Asset GetAsset(int id)
+        public async Task<Asset?> GetAsset(int id)
         {
-            return _context.Assets.SingleOrDefault(u => u.Id == id)!;
+            return await _repository.GetById(id);
         }
 
-        [HttpDelete]
-        public IActionResult DeleteAsset(int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsset(int id)
         {
-            var asst = _context.Assets.SingleOrDefault(u => u.Id == id);
-            if (asst == null)
+            var res = await _repository.Delete(id);
+            if (res == -1)
             {
-                return NotFound("Asset with the id: " + id + " does not exist");
+                return NotFound(new DTO.DTO.ActionResult
+                {
+                    Success = false,
+                    Title = "Something went wrong",
+                    Message = "Oops, something went wrong server side. Please try again later."
+                });
             }
-            _context.Assets.Remove(asst);
-            _context.SaveChanges();
-            return Ok("Asset with the id: " + id + " has been deleted successfully");
+            return Ok(new DTO.DTO.ActionResult
+            {
+                Success = true,
+                Title = "Deletion successful",
+                Message = "You have deleted an asset."
+            });
         }
 
         [HttpPost]
-        public IActionResult AddAsset(Asset asset)
+        public async Task<IActionResult> AddAsset(Asset asst)
         {
-            _context.Assets.Add(asset);
-            _context.SaveChanges();
-            return Created("api/Assets/" + asset.Id, asset);
+            var res = await _repository.Create(asst);
+            if (res == -1)
+            {
+                return NotFound(new DTO.DTO.ActionResult
+                {
+                    Success = false,
+                    Title = "Something went wrong",
+                    Message = "Oops, something went wrong server side. Please try again later."
+                });
+            }
+            return Ok(new DTO.DTO.ActionResult
+            {
+                Success = true,
+                Title = "Creation successful",
+                Message = "You have create an new asset."
+            });
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateAsset(int id)
+        public async Task<IActionResult> UpdateAsset(int id)
         {
-            var asst = _context.Assets.SingleOrDefault(u => u.Id == id);
-            if (asst == null)
+            var res = await _repository.Update(id);
+            if (res == -1)
             {
-                return NotFound("Asset with the id: " + id + " does not exist");
+                return NotFound(new DTO.DTO.ActionResult
+                {
+                    Success = false,
+                    Title = "Something went wrong",
+                    Message = "Oops, something went wrong server side. Please try again later."
+                });
             }
-            _context.Update(asst);
-            _context.SaveChanges();
-            return Ok("Asset with the id: " + id + "has been updated successfully");
+            return Ok(new DTO.DTO.ActionResult
+            {
+                Success = true,
+                Title = "Update successful",
+                Message = "You have updated an asset."
+            });
         }
     }
 }

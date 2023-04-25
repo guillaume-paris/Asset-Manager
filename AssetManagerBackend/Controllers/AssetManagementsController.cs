@@ -1,5 +1,5 @@
-﻿using AssetManagerBackend.Models;
-using Microsoft.AspNetCore.Http;
+﻿using AssetManagerBackend.Interfaces;
+using AssetManagerBackend.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssetManagerBackend.Controllers
@@ -8,57 +8,86 @@ namespace AssetManagerBackend.Controllers
     [ApiController]
     public class AssetManagementsController : ControllerBase
     {
-        private readonly AssetManagementDbContext _context;
+        private readonly IRepository<AssetManagement> _repository;
 
-        public AssetManagementsController(AssetManagementDbContext context)
+        public AssetManagementsController(IRepository<AssetManagement> repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         [HttpGet]
         public List<AssetManagement> GetAssetManagements()
         {
-            return _context.AssetManagements.ToList();
+            return _repository.GetAll().ToList();
         }
 
         [HttpGet("{id}")]
-        public AssetManagement GetAssetManagement(int id)
+        public async Task<AssetManagement?>GetAssetManagement(int id)
         {
-            return _context.AssetManagements.SingleOrDefault(u => u.Id == id)!;
+            return await _repository.GetById(id);
         }
 
-        [HttpDelete]
-        public IActionResult DeleteAssetManagement(int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAssetManagement(int id)
         {
-            var asstMngmnt = _context.AssetManagements.SingleOrDefault(u => u.Id == id);
-            if (asstMngmnt == null)
+            var res = await _repository.Delete(id);
+            if (res == -1)
             {
-                return NotFound("AssetManagement with the id: " + id + " does not exist");
+                return NotFound(new DTO.DTO.ActionResult
+                {
+                    Success = false,
+                    Title = "Something went wrong",
+                    Message = "Oops, something went wrong server side. Please try again later."
+                });
             }
-            _context.AssetManagements.Remove(asstMngmnt);
-            _context.SaveChanges();
-            return Ok("AssetManagement with the id: " + id + " has been deleted successfully");
+            return Ok(new DTO.DTO.ActionResult
+            {
+                Success = true,
+                Title = "Deletion successful",
+                Message = "You have deleted a link."
+            });
         }
 
         [HttpPost]
-        public IActionResult AddAssetManagement(AssetManagement asstMngmnt)
+        public async Task<IActionResult> AddAssetManagement(AssetManagement asstMngmnt)
         {
-            _context.AssetManagements.Add(asstMngmnt);
-            _context.SaveChanges();
-            return Created("api/AssetManagements/" + asstMngmnt.Id, asstMngmnt);
+            var res = await _repository.Create(asstMngmnt);
+            if (res == -1)
+            {
+                return NotFound(new DTO.DTO.ActionResult
+                {
+                    Success = false,
+                    Title = "Something went wrong",
+                    Message = "Oops, something went wrong server side. Please try again later."
+                });
+            }
+            return Ok(new DTO.DTO.ActionResult
+            {
+                Success = true,
+                Title = "Creation successful",
+                Message = "You have created a new link."
+            });
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateAssetManagement(int id)
+        public async Task<IActionResult> UpdateAssetManagement(int id)
         {
-            var asstMngmnt = _context.AssetManagements.SingleOrDefault(u => u.Id == id);
-            if (asstMngmnt == null)
+            var res = await _repository.Update(id);
+            if (res == -1)
             {
-                return NotFound("AssetManagement with the id: " + id + " does not exist");
+                return NotFound(new DTO.DTO.ActionResult
+                {
+                    Success = false,
+                    Title = "Something went wrong",
+                    Message = "Oops, something went wrong server side. Please try again later."
+                });
             }
-            _context.Update(asstMngmnt);
-            _context.SaveChanges();
-            return Ok("AssetManagement with the id: " + id + "has been updated successfully");
+            return Ok(new DTO.DTO.ActionResult
+            {
+                Success = true,
+                Title = "Update successful",
+                Message = "You have updated a link."
+            });
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using AssetManagerBackend.Models;
-using Microsoft.AspNetCore.Http;
+﻿using AssetManagerBackend.Interfaces;
+using AssetManagerBackend.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssetManagerBackend.Controllers
@@ -8,57 +8,86 @@ namespace AssetManagerBackend.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly AssetManagementDbContext _context;
+        private readonly IRepository<User> _repository;
 
-        public UsersController(AssetManagementDbContext context)
+        public UsersController(IRepository<User> repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         [HttpGet]
         public List<User> GetUsers()
         {
-            return _context.Users.ToList();
+            return _repository.GetAll().ToList();
         }
 
         [HttpGet("{id}")]
-        public User GetUser(int id)
+        public async Task<User?> GetUser(int id)
         {
-            return _context.Users.SingleOrDefault(u => u.Id == id)!;
+            return await _repository.GetById(id);
         }
 
-        [HttpDelete]
-        public IActionResult DeleteUser(int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
         {
-            var usr = _context.Users.SingleOrDefault(u =>u.Id == id);
-            if (usr == null)
+            var res = await _repository.Delete(id);
+            if (res == -1)
             {
-                return NotFound("User with the id: " + id + " does not exist");
+                return NotFound(new DTO.DTO.ActionResult
+                {
+                    Success = false,
+                    Title = "Something went wrong",
+                    Message = "Oops, something went wrong server side. Please try again later."
+                });
             }
-            _context.Users.Remove(usr);
-            _context.SaveChanges();
-            return Ok("User with the id: " + id + " has been deleted successfully");
+            return Ok(new DTO.DTO.ActionResult
+            {
+                Success = true,
+                Title = "Deletion successful",
+                Message = "You have deleted a user."
+            });
         }
 
         [HttpPost]
-        public IActionResult AddUser(User user)
+        public async Task<IActionResult> AddUser(User usr)
         {
-            _context.Users.Add(user);
-            _context.SaveChanges();
-            return Created("api/Users/" + user.Id, user);
+            var res = await _repository.Create(usr);
+            if (res == -1)
+            {
+                return NotFound(new DTO.DTO.ActionResult
+                {
+                    Success = false,
+                    Title = "Something went wrong",
+                    Message = "Oops, something went wrong server side. Please try again later."
+                });
+            }
+            return Ok(new DTO.DTO.ActionResult
+            {
+                Success = true,
+                Title = "Creation successful",
+                Message = "You have created a new user."
+            });
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateUser(int id)
+        public async Task<IActionResult> UpdateUser(int id)
         {
-            var usr = _context.Users.SingleOrDefault(u => u.Id == id);
-            if (usr == null)
+            var res = await _repository.Update(id);
+            if (res == -1)
             {
-                return NotFound("User with the id: " + id + " does not exist");
+                return NotFound(new DTO.DTO.ActionResult
+                {
+                    Success = false,
+                    Title = "Something went wrong",
+                    Message = "Oops, something went wrong server side. Please try again later."
+                });
             }
-            _context.Update(usr);
-            _context.SaveChanges();
-            return Ok("User with the id: " + id + "has been updated successfully");
+            return Ok(new DTO.DTO.ActionResult
+            {
+                Success = true,
+                Title = "Update successful",
+                Message = "You have updated a user."
+            });
         }
     }
 }

@@ -4,11 +4,15 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using AssetManagerBackend.Interfaces;
+using AssetManagerBackend.Repositories;
+using AssetManagerBackend.Databases;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
@@ -22,13 +26,15 @@ builder.Services.AddCors(options =>
         });
 });
 
+/*builder.Services.AddScoped<IUserAccountRepository, UserAccountRepository>();*/
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 // Add EF Core DbContext to the container with in-memory database
-builder.Services.AddDbContext<AssetManagementDbContext>(options =>
+builder.Services.AddDbContext<AssetManagerDbContext>(options =>
     options.UseInMemoryDatabase(databaseName: "MyInMemoryDatabase"));
 
 var app = builder.Build();
 
-static void SeedData(AssetManagementDbContext context)
+static void SeedData(AssetManagerDbContext context)
 {
     UserAccount userAccount1 = new()
     {
@@ -63,7 +69,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 var scope = app.Services.CreateScope();
-var context = scope.ServiceProvider.GetService<AssetManagementDbContext>();
+var context = scope.ServiceProvider.GetService<AssetManagerDbContext>();
 SeedData(context!);
 
 app.Run();

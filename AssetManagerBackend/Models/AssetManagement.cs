@@ -1,8 +1,7 @@
 ﻿namespace AssetManagerBackend.Models
 {
-    public class AssetManagement
+    public class AssetManagement: Entity
     {
-        public int Id { get; set; }
         public string? User { get; set; }
         public string? Asset { get; set; }
     }
