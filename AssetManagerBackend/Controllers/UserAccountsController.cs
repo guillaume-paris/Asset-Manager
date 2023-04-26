@@ -97,9 +97,9 @@ namespace AssetManagerBackend.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUserAccount(int id)
+        public async Task<IActionResult> UpdateUserAccount(UserAccount newUsrAcnt)
         {
-            var res = await _repository.Update(id);
+            var res = await _repository.Update(newUsrAcnt.Id, newUsrAcnt);
             if (res == -1)
             {
                 return NotFound(new DTO.DTO.ActionResult

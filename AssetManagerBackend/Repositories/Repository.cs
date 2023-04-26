@@ -2,6 +2,7 @@
 using AssetManagerBackend.Interfaces;
 using AssetManagerBackend.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
 namespace AssetManagerBackend.Repositories
 {
@@ -40,16 +41,14 @@ namespace AssetManagerBackend.Repositories
 
         public async Task<int> Create(TEntity entity)
         {
-            int id = await _context.Set<TEntity>().CountAsync();
-            entity.Id = id + 1;
+            int maxId = await _context.Set<TEntity>().MaxAsync(e => (int?)e.Id) ?? 0;
+            entity.Id = maxId + 1;
             await _context.Set<TEntity>().AddAsync(entity);
-
             await _context.SaveChangesAsync();
-
             return entity.Id;
         }
 
-        public async Task<int> Update(int id)
+        public async Task<int> Update(int id, TEntity newEntity)
         {
             var entity = await GetById(id);
 
@@ -57,7 +56,7 @@ namespace AssetManagerBackend.Repositories
             {
                 return -1;
             }
-            _context.Set<TEntity>().Update(entity);
+            _context.Set<TEntity>().Update(newEntity);
             await _context.SaveChangesAsync();
             return entity.Id;
         }

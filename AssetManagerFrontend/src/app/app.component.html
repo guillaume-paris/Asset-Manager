@@ -8,16 +8,16 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item pb-1 px-1">
-          <a class="nav-link ps-2" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+          <a class="nav-link ps-2" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
         </li>
         <li class="nav-item pb-1 px-1" *ngIf="isLoggedIn">
-          <a class="nav-link ps-2" routerLink="/user" routerLinkActive="active">User</a>
+          <a class="nav-link ps-2" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show" routerLink="/user" routerLinkActive="active">User</a>
         </li>
         <li class="nav-item pb-1 px-1" *ngIf="isLoggedIn">
-          <a class="nav-link ps-2" routerLink="/asset" routerLinkActive="active">Asset</a>
+          <a class="nav-link ps-2" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show" routerLink="/asset" routerLinkActive="active">Asset</a>
         </li>
         <li class="nav-item pb-1 px-1" *ngIf="isLoggedIn">
-          <a class="nav-link ps-2" routerLink="/asset-management" routerLinkActive="active">Asset management</a>
+          <a class="nav-link ps-2" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show" routerLink="/asset-management" routerLinkActive="active">Asset management</a>
         </li>
       </ul>
       <ul class="navbar-nav">

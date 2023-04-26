@@ -32,11 +32,11 @@ export class AuthService {
     if (this.isRouteAuthenticated()) {
       return of({ success: false, title: "An error occured", message: "You are already connected", username: "", token: "", expires_in: 0 });
     }
-    let URL: string = "http://localhost:61150/api/UserAccounts/login";
-    let body = JSON.stringify({
-      "Username": usernameEmail,
-      "Email": usernameEmail,
-      "Password": password
+    const URL: string = "http://localhost:61150/api/UserAccounts/login";
+    const body = JSON.stringify({
+      Username: usernameEmail,
+      Email: usernameEmail,
+      Password: password
     });
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post<ILogin>(URL, body, { headers: headers });
@@ -48,10 +48,10 @@ export class AuthService {
     }
     let URL: string = "http://localhost:61150/api/UserAccounts/";
     let body = JSON.stringify({
-      "Id": 0,
-      "Username": username,
-      "Email": email,
-      "Password": password
+      Id: 0,
+      Username: username,
+      Email: email,
+      Password: password
     });
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post<IRegister>(URL, body, { headers: headers });

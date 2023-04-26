@@ -3,7 +3,7 @@ import { IGenericTable, IGenericTableRow } from '../models/generic-crud-table.mo
 import data from '../../app/config/asset.config.json'
 import { IResponse } from '../models/api.model';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IAsset } from '../models/asset.model';
 
 @Injectable()
@@ -17,11 +17,11 @@ export class AssetService {
   }
 
   getAssets(): IGenericTable {
-    const URL: string = "assets/asset/getAssets.json";
+    const URL: string = "http://localhost:61150/api/Assets";
     const assets: IGenericTableRow[] = [];
 
-    this.http.get<IAsset>(URL).subscribe((data: IAsset) => {
-      data.assets.forEach((asset) => {
+    this.http.get<Array<IAsset>>(URL).subscribe((data: Array<IAsset>) => {
+      data.forEach((asset) => {
         const rowAsset: IGenericTableRow = {
           values: [asset.name, asset.description, asset.brand, asset.price, asset.quantity, asset.category],
           id: asset.id
@@ -34,40 +34,40 @@ export class AssetService {
   }
   
   createAsset(newAsset: IGenericTableRow): Observable<IResponse> {
-    const URL: string = "assets/asset/createAsset.json";
+    const URL: string = "http://localhost:61150/api/Assets";
     const body = JSON.stringify({ 
+      id: 1,
       name: newAsset.values[0],
       description: newAsset.values[1],
       brand: newAsset.values[2],
       price: newAsset.values[3],
-      quantiy: newAsset.values[4],
+      quantity: newAsset.values[4],
       category: newAsset.values[5]
     });
     
-    return this.http.get<IResponse>(URL);
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<IResponse>(URL, body, { headers: headers });
   }
 
   updateAsset(id: number, updatedAsset: IGenericTableRow): Observable<IResponse> {
-    const URL: string = "assets/asset/updateAsset.json";
+    const URL: string = "http://localhost:61150/api/Assets/" + id.toString();
     const body = JSON.stringify({ 
       name: updatedAsset.values[0],
       description: updatedAsset.values[1],
       brand: updatedAsset.values[2],
       price: updatedAsset.values[3],
-      quantiy: updatedAsset.values[4],
+      quantity: updatedAsset.values[4],
       category: updatedAsset.values[5],
       id: id,
     });
   
-    return this.http.get<IResponse>(URL);
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.put<IResponse>(URL, body, { headers: headers });
   }
 
   deleteAsset(id: number): Observable<IResponse> {
-    const URL: string = "assets/asset/deleteAsset.json";
-    const body = JSON.stringify({ 
-      id: id,
-    });
+    const URL: string = "http://localhost:61150/api/Assets/" + id.toString();
 
-    return this.http.get<IResponse>(URL);
+    return this.http.delete<IResponse>(URL);
   }
 }

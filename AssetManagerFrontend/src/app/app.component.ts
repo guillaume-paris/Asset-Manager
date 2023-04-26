@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit,  } from '@angular/core';
 import { Router } from '@angular/router';
 import * as bootstrap from 'bootstrap';
-import { Toast } from 'bootstrap';
 import { AuthService } from 'src/_shared/services/auth.service';
 import { GenericToastService } from 'src/_shared/services/generic-toast.service';
+import { Collapse } from 'bootstrap';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +11,6 @@ import { GenericToastService } from 'src/_shared/services/generic-toast.service'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-
   showLoginModal: boolean = false;
   showRegisterModal: boolean = false;
 

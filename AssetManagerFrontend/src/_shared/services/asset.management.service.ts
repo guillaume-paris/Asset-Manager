@@ -4,7 +4,7 @@ import data from '../../app/config/asset.management.config.json'
 import { AssetService } from './asset.service';
 import { UserService } from './user.service';
 import { IAssetManagement } from '../models/asset.management.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IResponse } from '../models/api.model';
 import { Observable } from 'rxjs';
 
@@ -38,20 +38,24 @@ export class AssetManagementService {
         if (row.values[0] === user)
           assetsOfUser.push(row.values[1])
       });
+      console.log("assetsOfUser: ", assetsOfUser);
       this.assets.rows.filter(asset => {
-        if (!assetsOfUser.includes(asset.values[0]))
+        console.log("asset : ", asset);
+        if (!assetsOfUser.includes(asset.values[0])) {
           assetsAvailable.push(asset);
+        }
       });
+      console.log("assetsAvailable: ", assetsAvailable);
     }
     return assetsAvailable;
   }
 
   getAssetsManagement(): IGenericTable {
-    const URL: string = "assets/asset-management/getAssetsManagement.json";
+    const URL: string = "http://localhost:61150/api/AssetManagements";
     const assetsManagement: IGenericTableRow[] = [];
 
-    this.http.get<IAssetManagement>(URL).subscribe((data: IAssetManagement) => {
-      data.assetsManagement.forEach((assetManagement) => {
+    this.http.get<Array<IAssetManagement>>(URL).subscribe((data: Array<IAssetManagement>) => {
+      data.forEach((assetManagement) => {
         const rowAssetManagement: IGenericTableRow = {
           values: [assetManagement.user, assetManagement.asset],
           id: assetManagement.id
@@ -64,32 +68,32 @@ export class AssetManagementService {
   }
   
   createAssetManagement(newAssetManagement: IGenericTableRow): Observable<IResponse> {
-    const URL: string = "assets/asset-management/createAssetManagement.json";
-    const body = JSON.stringify({ 
+    const URL: string = "http://localhost:61150/api/AssetManagements";
+    const body = JSON.stringify({
+      id: 1,
       user: newAssetManagement.values[0],
       asset: newAssetManagement.values[1],
     });
     
-    return this.http.get<IResponse>(URL);
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<IResponse>(URL, body, { headers: headers });
   }
 
   updateAssetManagement(id: number, newAssetManagement: IGenericTableRow): Observable<IResponse> {
-    const URL: string = "assets/asset-management/updateAssetManagement.json";
+    const URL: string = "http://localhost:61150/api/AssetManagements/" + id.toString();
     const body = JSON.stringify({ 
       user: newAssetManagement.values[0],
       asset: newAssetManagement.values[1],
       id: id,
     });
   
-    return this.http.get<IResponse>(URL);
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.put<IResponse>(URL, body, { headers: headers });
   }
 
   deleteAssetManagement(id: number): Observable<IResponse> {
-    const URL: string = "assets/asset-management/deleteAssetManagement.json";
-    const body = JSON.stringify({ 
-      id: id,
-    });
+    const URL: string = "http://localhost:61150/api/AssetManagements/" + id.toString();
 
-    return this.http.get<IResponse>(URL);
+    return this.http.delete<IResponse>(URL);
   }
 }

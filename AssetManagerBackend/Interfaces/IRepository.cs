@@ -10,7 +10,7 @@
 
         Task<int> Create(TEntity entity);
 
-        Task<int> Update(int id);
+        Task<int> Update(int id, TEntity newEntity);
 
         Task<int> Delete(int id);
     }

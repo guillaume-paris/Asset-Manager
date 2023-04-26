@@ -70,9 +70,9 @@ namespace AssetManagerBackend.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAssetManagement(int id)
+        public async Task<IActionResult> UpdateAssetManagement(AssetManagement newAsstMngmnt)
         {
-            var res = await _repository.Update(id);
+            var res = await _repository.Update(newAsstMngmnt.Id, newAsstMngmnt);
             if (res == -1)
             {
                 return NotFound(new DTO.DTO.ActionResult

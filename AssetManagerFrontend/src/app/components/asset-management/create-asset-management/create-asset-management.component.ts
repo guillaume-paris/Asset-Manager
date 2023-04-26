@@ -27,7 +27,7 @@ export class CreateAssetManagementComponent {
   }
 
   refreshAssetsForUser(): void {
-    this.assetManagementService.getAssetsForUser(this.createAssetManagementForm.value.user);
+    this.assets = this.assetManagementService.getAssetsForUser(this.createAssetManagementForm.value.user);
   }
 
   hideModal(): void {
