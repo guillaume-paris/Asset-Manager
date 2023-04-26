@@ -13,6 +13,8 @@ export class LoginComponent implements OnInit {
   @Output() closeModal = new EventEmitter();
   @Output() setConnected = new EventEmitter<string>();
 
+  isLoading = false;
+
   constructor(private authService: AuthService, private toastService: GenericToastService) { }
 
   ngOnInit(): void {
@@ -33,7 +35,9 @@ export class LoginComponent implements OnInit {
     }
     let usernameEmail = this.loginForm.get('usernameEmail')?.value;
     let password = this.loginForm.get('password')?.value;
+    this.isLoading = true;
     this.authService.login(usernameEmail, password).subscribe((data: ILogin) => {
+      this.isLoading = false;
       if (data.success) {
         this.error_login_msg = undefined;
         this.toastService.showToast(data.title, data.message, "success");
@@ -45,8 +49,9 @@ export class LoginComponent implements OnInit {
         this.error_login_msg = data.message;
       }
     }, (error) => {
+      this.isLoading = false;
       const data: ILogin = error.error;
-      this.toastService.showToast(data.title, data.message, "danger");
+      this.toastService.showToast((data.title ? data.title : "Network Error"), (data.message ? data.message : "Oops, the server can't be reached, try again later."), "danger");
       this.error_login_msg = data.message;
     });
   }

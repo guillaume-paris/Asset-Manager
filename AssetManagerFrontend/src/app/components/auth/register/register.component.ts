@@ -12,6 +12,8 @@ import { GenericToastService } from 'src/_shared/services/generic-toast.service'
 export class RegisterComponent {
   @Output() closeModal = new EventEmitter();
   @Output() setConnected = new EventEmitter<string>();
+  
+  isLoading = false;
 
   constructor(private authService: AuthService, private toastService: GenericToastService) { }
 
@@ -42,7 +44,9 @@ export class RegisterComponent {
     let username = this.registerForm.get('username')?.value;
     let email = this.registerForm.get('email')?.value;
     let password = this.registerForm.get('password')?.value;
+    this.isLoading = true;
     this.authService.register(username, email, password).subscribe((data: IRegister) => {
+      this.isLoading = false;
       if (data.success) {
         this.error_login_msg = undefined;
         this.toastService.showToast(data.title, data.message, "success");
@@ -54,8 +58,9 @@ export class RegisterComponent {
         this.error_login_msg = data.message;
       }
     }, (error) => {
+      this.isLoading = false;
       const data: IRegister = error.error;
-      this.toastService.showToast(data.title, data.message, "danger");
+      this.toastService.showToast((data.title ? data.title : "Network Error"), (data.message ? data.message : "Oops, the server can't be reached, try again later."), "danger");
       this.error_login_msg = data.message;
     });
   }
