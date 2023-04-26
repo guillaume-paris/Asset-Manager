@@ -1,0 +1,13 @@
+{
+    "filter": [
+        {
+            "name": "user",
+            "isActive": true
+        },
+        {
+            "name": "asset",
+            "isActive": true
+        }
+    ],
+    "rows": [ ]
+}

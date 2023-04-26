@@ -1,0 +1,21 @@
+{
+    "filter": [
+        {
+            "name": "first name",
+            "isActive": true
+        },
+        {
+            "name": "last name",
+            "isActive": true
+        },
+        {
+            "name": "email",
+            "isActive": true
+        },
+        {
+            "name": "role",
+            "isActive": true
+        }
+    ],
+    "rows": []
+}

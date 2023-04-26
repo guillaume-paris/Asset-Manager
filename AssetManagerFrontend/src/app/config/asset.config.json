@@ -1,0 +1,30 @@
+{
+    "filter": [
+        {
+            "name": "name",
+            "isActive": true
+        },
+        {
+            "name": "description",
+            "isActive": true
+        },
+        {
+            "name": "brand",
+            "isActive": true
+        },
+        {
+            "name": "price (€)",
+            "isActive": true
+        },
+        {
+            "name": "quantity",
+            "isActive": true
+        },
+        {
+            "name": "category",
+            "isActive": true
+        }
+    ],
+    "rows": [
+    ]
+}
