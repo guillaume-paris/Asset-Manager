@@ -30,8 +30,8 @@ namespace AssetManagerBackend.Controllers
                 return NotFound(new DTO.ActionResult
                 {
                     Success = false,
-                    Title = "Something went wrong",
-                    Message = "Oops, something went wrong server side. Please try again later."
+                    Title = "Wrong credentials",
+                    Message = "Incorrect password or the user account does not exist."
                 });
             }
             return Ok(new DTO.LoginResult
