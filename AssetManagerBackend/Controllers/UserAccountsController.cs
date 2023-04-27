@@ -22,19 +22,19 @@ namespace AssetManagerBackend.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> IsUserAccountExist(DTO.DTO.Login login)
+        public async Task<IActionResult> IsUserAccountExist(DTO.Login login)
         {
             UserAccount? userAccount = await _repository.IsUserAccountExist(login.Username!, login.Email!, login.Password!);
             if (userAccount == null)
             {
-                return NotFound(new DTO.DTO.ActionResult
+                return NotFound(new DTO.ActionResult
                 {
                     Success = false,
                     Title = "Something went wrong",
                     Message = "Oops, something went wrong server side. Please try again later."
                 });
             }
-            return Ok(new DTO.DTO.LoginResult
+            return Ok(new DTO.LoginResult
             {
                 Success = true,
                 Title = "Login successful",
@@ -57,14 +57,14 @@ namespace AssetManagerBackend.Controllers
             var res = await _repository.Delete(id);
             if (res == -1)
             {
-                return NotFound(new DTO.DTO.ActionResult
+                return NotFound(new DTO.ActionResult
                 {
                     Success = false,
                     Title = "Something went wrong",
                     Message = "Oops, something went wrong server side. Please try again later."
                 });
             }
-            return Ok(new DTO.DTO.ActionResult
+            return Ok(new DTO.ActionResult
             {
                 Success = true,
                 Title = "Deletion successful",
@@ -78,14 +78,14 @@ namespace AssetManagerBackend.Controllers
             var res = await _repository.Create(usrAcnt);
             if (res == -1)
             {
-                return NotFound(new DTO.DTO.ActionResult
+                return NotFound(new DTO.ActionResult
                 {
                     Success = false,
                     Title = "Something went wrong",
                     Message = "Oops, something went wrong server side. Please try again later."
                 });
             }
-            return Ok(new DTO.DTO.LoginResult
+            return Ok(new DTO.LoginResult
             {
                 Success = true,
                 Title = "Creation successful",
@@ -102,14 +102,14 @@ namespace AssetManagerBackend.Controllers
             var res = await _repository.Update(newUsrAcnt.Id, newUsrAcnt);
             if (res == -1)
             {
-                return NotFound(new DTO.DTO.ActionResult
+                return NotFound(new DTO.ActionResult
                 {
                     Success = false,
                     Title = "Something went wrong",
                     Message = "Oops, something went wrong server side. Please try again later."
                 });
             }
-            return Ok(new DTO.DTO.ActionResult
+            return Ok(new DTO.ActionResult
             {
                 Success = true,
                 Title = "Update successful",
