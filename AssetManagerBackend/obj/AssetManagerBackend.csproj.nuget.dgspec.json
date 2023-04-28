@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\gparis\\Desktop\\Asset-Manager\\AssetManagerBackend\\AssetManagerBackend.csproj": {}
+    "C:\\Users\\guill\\dennemeyer\\Asset-Manager\\AssetManagerBackend\\AssetManagerBackend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\gparis\\Desktop\\Asset-Manager\\AssetManagerBackend\\AssetManagerBackend.csproj": {
+    "C:\\Users\\guill\\dennemeyer\\Asset-Manager\\AssetManagerBackend\\AssetManagerBackend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\gparis\\Desktop\\Asset-Manager\\AssetManagerBackend\\AssetManagerBackend.csproj",
+        "projectUniqueName": "C:\\Users\\guill\\dennemeyer\\Asset-Manager\\AssetManagerBackend\\AssetManagerBackend.csproj",
         "projectName": "AssetManagerBackend",
-        "projectPath": "C:\\Users\\gparis\\Desktop\\Asset-Manager\\AssetManagerBackend\\AssetManagerBackend.csproj",
-        "packagesPath": "C:\\Users\\gparis\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\gparis\\Desktop\\Asset-Manager\\AssetManagerBackend\\obj\\",
+        "projectPath": "C:\\Users\\guill\\dennemeyer\\Asset-Manager\\AssetManagerBackend\\AssetManagerBackend.csproj",
+        "packagesPath": "C:\\Users\\guill\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\guill\\dennemeyer\\Asset-Manager\\AssetManagerBackend\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\gparis\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\guill\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -86,7 +82,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\6.0.408\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
         }
       }
     }
