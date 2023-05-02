@@ -126,7 +126,7 @@ static void SeedData(AssetManagerDbContext context)
         User = "Jackie Chan",
         Asset = "Pen"
     };
-    context.Add(userAccount1);
+    /*context.Add(userAccount1);
     context.Add(userAccount2);
     context.Add(user1);
     context.Add(user2);
@@ -137,7 +137,7 @@ static void SeedData(AssetManagerDbContext context)
     context.Add(asset4);
     context.Add(assetManagement1);
     context.Add(assetManagement2);
-    context.SaveChanges();
+    context.SaveChanges();*/
 }
 
 // Configure the HTTP request pipeline.
