@@ -8,6 +8,9 @@
 bin/
 obj/
 
+# Test files
+TestResults/
+
 # User-specific files
 *.user
 
