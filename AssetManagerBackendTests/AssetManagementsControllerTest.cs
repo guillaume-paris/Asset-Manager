@@ -9,11 +9,11 @@ namespace AssetManagerBackendTests
 {
     public class AssetManagementsControllerTest
     {
-        private readonly Mock<IRepository<AssetManagement>> _userMock;
+        private readonly Mock<IRepository<AssetManagement>> _assetManagementMock;
 
         public AssetManagementsControllerTest()
         {
-            _userMock = new Mock<IRepository<AssetManagement>>();
+            _assetManagementMock = new Mock<IRepository<AssetManagement>>();
         }
 
         [Fact]
@@ -21,10 +21,10 @@ namespace AssetManagerBackendTests
         {
             //Arrange
             List<AssetManagement> listAssetManagement = new();
-            _userMock.Setup(x => x.GetAll()).Returns(listAssetManagement.AsQueryable());
+            _assetManagementMock.Setup(x => x.GetAll()).Returns(listAssetManagement.AsQueryable());
 
             // Act
-            var controller = new AssetManagementsController(_userMock.Object);
+            var controller = new AssetManagementsController(_assetManagementMock.Object);
 
             var response = controller.GetAssetManagements();
 
@@ -34,80 +34,119 @@ namespace AssetManagerBackendTests
         }
 
         [Fact]
-        public async Task AssetManagements_Create_ReturnsValidUserCreated()
+        public async Task AssetManagements_Create_ReturnsValidCreated()
         {
             // Arrange
-            int expectedReturn = 1;
-            var assetManagement = new AssetManagement { Id = 1, User = "Jackie Chan", Asset = "Iphone 15" };
-            _userMock.Setup(x => x.Create(assetManagement)).ReturnsAsync(expectedReturn);
+            int expectedValidReturn = 1;
+            AssetManagement assetManagement = new () { Id = 1, User = "Jackie Chan", Asset = "Iphone 15" };
+            _assetManagementMock.Setup(x => x.Create(It.IsAny<AssetManagement>())).ReturnsAsync(expectedValidReturn);
 
             // Act
-            var result = await _userMock.Object.Create(assetManagement);
+            var controller = new AssetManagementsController(_assetManagementMock.Object);
+
+            var result = await controller.AddAssetManagement(assetManagement);
 
             // Assert
-            Assert.NotEqual((-1), result);
+            var okObjectResult = Assert.IsType<OkObjectResult>(result);
+            var createResult = Assert.IsType<AssetManagerBackend.DTO.ActionResponse>(okObjectResult.Value);
+            Assert.True(createResult.Success);
+            Assert.Equal("Creation successful", createResult.Title);
+            Assert.Equal("You have created a new link.", createResult.Message);
         }
 
         [Fact]
         public async Task AssetManagements_Update_ReturnsValidUpdated()
         {
             // Arrange
-            int expectedReturn = 1;
-            var assetManagement = new AssetManagement { Id = 1, User = "Jackie Chan", Asset = "Iphone 15" };
-            _userMock.Setup(x => x.Update(assetManagement.Id, assetManagement)).ReturnsAsync(expectedReturn);
+            int expectedValidReturn = 1;
+            int expectedInvalidReturn = -1;
+            AssetManagement assetManagement = new() { Id = 1, User = "Jackie Chan", Asset = "Iphone 15" };
+            AssetManagement assetManagement2 = new() { Id = 1, User = "Jackie Chan222", Asset = "Iphone 11" };
+            _assetManagementMock.Setup(x => x.Update(It.IsAny<int>(), It.IsAny<AssetManagement>())).ReturnsAsync(expectedInvalidReturn);
+            _assetManagementMock.Setup(x => x.Update(It.Is<int>(y => y.Equals(assetManagement.Id)), It.IsAny<AssetManagement>())).ReturnsAsync(expectedValidReturn);
 
             // Act
-            var result = await _userMock.Object.Update(assetManagement.Id, assetManagement);
+            var controller = new AssetManagementsController(_assetManagementMock.Object);
+
+            var result = await controller.UpdateAssetManagement(assetManagement);
 
             // Assert
-            Assert.NotEqual((-1), result);
-            Assert.Equal(expectedReturn, result);
+            var okObjectResult = Assert.IsType<OkObjectResult>(result);
+            var updateResult = Assert.IsType<AssetManagerBackend.DTO.ActionResponse>(okObjectResult.Value);
+            Assert.True(updateResult.Success);
+            Assert.Equal("Update successful", updateResult.Title);
+            Assert.Equal("You have updated a link.", updateResult.Message);
         }
 
-        /*[Fact]
+        [Fact]
         public async Task AssetManagements_Update_ReturnsInvalidUpdated()
         {
             // Arrange
-            int expectedReturn = 1;
-            var assetManagement = new AssetManagement { Id = 80, User = "Jackie Chan", Asset = "Iphone 15" };
-            _userMock.Setup(x => x.Update(assetManagement.Id, assetManagement)).ReturnsAsync(expectedReturn);
+            int expectedValidReturn = 1;
+            int expectedInvalidReturn = -1;
+            AssetManagement assetManagement = new() { Id = 1, User = "Jackie Chan", Asset = "Iphone 15" };
+            AssetManagement assetManagement2 = new() { Id = 2, User = "Jackie Chan222", Asset = "Iphone 11" };
+            _assetManagementMock.Setup(x => x.Update(It.IsAny<int>(), It.IsAny<AssetManagement>())).ReturnsAsync(expectedInvalidReturn);
+            _assetManagementMock.Setup(x => x.Update(It.Is<int>(y => y.Equals(assetManagement.Id)), It.IsAny<AssetManagement>())).ReturnsAsync(expectedValidReturn);
 
             // Act
-            var result = await _userMock.Object.Update(assetManagement.Id, assetManagement);
+            var controller = new AssetManagementsController(_assetManagementMock.Object);
+
+            var result = await controller.UpdateAssetManagement(assetManagement2);
 
             // Assert
-            Assert.Equal((-1), result);
-        }*/
+            var notFoundObjectResult = Assert.IsType<NotFoundObjectResult>(result);
+            var updateResult = Assert.IsType<AssetManagerBackend.DTO.ActionResponse>(notFoundObjectResult.Value);
+            Assert.False(updateResult.Success);
+            Assert.Equal("Link not found", updateResult.Title);
+            Assert.Equal("There is no link for this id.", updateResult.Message);
+        }
 
         [Fact]
         public async Task AssetManagements_Delete_ReturnsValidDeleted()
         {
             // Arrange
-            int expectedReturn = 1;
+            int expectedValidReturn = 1;
+            int expectedInvalidReturn = -1;
             int assetManagementId = 1;
-            _userMock.Setup(x => x.Delete(assetManagementId)).ReturnsAsync(expectedReturn);
+            _assetManagementMock.Setup(x => x.Delete(It.IsAny<int>())).ReturnsAsync(expectedInvalidReturn);
+            _assetManagementMock.Setup(x => x.Delete(It.Is<int>(y => y.Equals(assetManagementId)))).ReturnsAsync(expectedValidReturn);
 
             // Act
-            var result = await _userMock.Object.Delete(assetManagementId);
+            var controller = new AssetManagementsController(_assetManagementMock.Object);
+
+            var result = await controller.DeleteAssetManagement(assetManagementId);
 
             // Assert
-            Assert.NotEqual((-1), result);
-            Assert.Equal(expectedReturn, result);
+            var okObjectResult = Assert.IsType<OkObjectResult>(result);
+            var deleteResult = Assert.IsType<AssetManagerBackend.DTO.ActionResponse>(okObjectResult.Value);
+            Assert.True(deleteResult.Success);
+            Assert.Equal("Deletion successful", deleteResult.Title);
+            Assert.Equal("You have deleted a link.", deleteResult.Message);
         }
 
-        /*[Fact]
-        public async Task UserAccounts_Delete_ReturnsInvalidDeleted()
+        [Fact]
+        public async Task AssetManagements_Delete_ReturnsInvalidDeleted()
         {
             // Arrange
-            int expectedReturn = 1;
-            int assetManagementId = -1;
-            _userMock.Setup(x => x.Delete(assetManagementId)).ReturnsAsync(expectedReturn);
+            int expectedValidReturn = 1;
+            int expectedInvalidReturn = -1;
+            int assetManagementId = 1;
+            int assetManagementId2 = 2;
+            _assetManagementMock.Setup(x => x.Delete(It.IsAny<int>())).ReturnsAsync(expectedInvalidReturn);
+            _assetManagementMock.Setup(x => x.Delete(It.Is<int>(y => y.Equals(assetManagementId)))).ReturnsAsync(expectedValidReturn);
 
             // Act
-            var result = await _userMock.Object.Delete(assetManagementId);
+            var controller = new AssetManagementsController(_assetManagementMock.Object);
+
+            var result = await controller.DeleteAssetManagement(assetManagementId2);
 
             // Assert
-            Assert.Equal((-1), result);
-        }*/
+            var notFoundObjectResult = Assert.IsType<NotFoundObjectResult>(result);
+            var deleteResult = Assert.IsType<AssetManagerBackend.DTO.ActionResponse>(notFoundObjectResult.Value);
+            Assert.False(deleteResult.Success);
+            Assert.Equal("Link not found", deleteResult.Title);
+            Assert.Equal("There is no link for this id.", deleteResult.Message);
+        }
     }
 }

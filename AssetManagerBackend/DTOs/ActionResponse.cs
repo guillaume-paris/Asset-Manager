@@ -1,6 +1,6 @@
 ﻿namespace AssetManagerBackend.DTO
 {
-    public class ActionResult
+    public class ActionResponse
     {
         public bool Success { get; set; }
         public string? Title { get; set; }
