@@ -109,7 +109,6 @@ namespace AssetManagerBackendTests
             int expectedValidReturn = 1;
             int expectedInvalidReturn = -1;
             int userId = 1;
-            int userId2 = 2;
             _userMock.Setup(x => x.Delete(It.IsAny<int>())).ReturnsAsync(expectedInvalidReturn);
             _userMock.Setup(x => x.Delete(It.Is<int>(y => y.Equals(userId)))).ReturnsAsync(expectedValidReturn);
 
