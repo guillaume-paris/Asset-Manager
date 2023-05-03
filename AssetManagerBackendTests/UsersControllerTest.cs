@@ -34,80 +34,119 @@ namespace AssetManagerBackendTests
         }
 
         [Fact]
-        public async Task Users_Create_ReturnsValidUserCreated()
+        public async Task Users_Create_ReturnsValidCreated()
         {
             // Arrange
-            int expectedReturn = 1;
+            int expectedValidReturn = 1;
             var user = new User { FirstName = "test", LastName = "test", Email = "test", Id = 1, Role = "Employee" };
-            _userMock.Setup(x => x.Create(user)).ReturnsAsync(expectedReturn);
+            _userMock.Setup(x => x.Create(It.IsAny<User>())).ReturnsAsync(expectedValidReturn);
 
             // Act
-            var result = await _userMock.Object.Create(user);
+            var controller = new UsersController(_userMock.Object);
+
+            var result = await controller.AddUser(user);
 
             // Assert
-            Assert.NotEqual((-1), result);
+            var okObjectResult = Assert.IsType<OkObjectResult>(result);
+            var createResult = Assert.IsType<AssetManagerBackend.DTO.ActionResponse>(okObjectResult.Value);
+            Assert.True(createResult.Success);
+            Assert.Equal("Creation successful", createResult.Title);
+            Assert.Equal("You have created a new user.", createResult.Message);
         }
 
         [Fact]
         public async Task Users_Update_ReturnsValidUpdated()
         {
             // Arrange
-            int expectedReturn = 1;
-            var user = new User { FirstName = "test", LastName = "test", Email = "test", Id = 1, Role = "Employee" };
-            _userMock.Setup(x => x.Update(user.Id, user)).ReturnsAsync(expectedReturn);
+            int expectedValidReturn = 1;
+            int expectedInvalidReturn = -1;
+            User user = new () { FirstName = "test", LastName = "test", Email = "test", Id = 1, Role = "Employee" };
+            User user2 = new () { FirstName = "test2", LastName = "test2", Email = "test2", Id = 1, Role = "Employee" };
+            _userMock.Setup(x => x.Update(It.IsAny<int>(), It.IsAny<User>())).ReturnsAsync(expectedInvalidReturn);
+            _userMock.Setup(x => x.Update(It.Is<int>(y => y.Equals(user.Id)), It.IsAny<User>())).ReturnsAsync(expectedValidReturn);
 
             // Act
-            var result = await _userMock.Object.Update(user.Id, user);
+            var controller = new UsersController(_userMock.Object);
+
+            var result = await controller.UpdateUser(user2);
 
             // Assert
-            Assert.NotEqual((-1), result);
-            Assert.Equal(expectedReturn, result);
+            var okObjectResult = Assert.IsType<OkObjectResult>(result);
+            var createResult = Assert.IsType<AssetManagerBackend.DTO.ActionResponse>(okObjectResult.Value);
+            Assert.True(createResult.Success);
+            Assert.Equal("Update successful", createResult.Title);
+            Assert.Equal("You have updated a user.", createResult.Message);
         }
 
-        /*[Fact]
+        [Fact]
         public async Task Users_Update_ReturnsInvalidUpdated()
         {
             // Arrange
-            int expectedReturn = 1;
-            var user = new User { FirstName = "test", LastName = "test", Email = "test", Id = 98, Role = "Employee" };
-            _userMock.Setup(x => x.Update(user.Id, user)).ReturnsAsync(expectedReturn);
+            int expectedValidReturn = 1;
+            int expectedInvalidReturn = -1;
+            User user = new() { FirstName = "test", LastName = "test", Email = "test", Id = 1, Role = "Employee" };
+            User user2 = new() { FirstName = "test2", LastName = "test2", Email = "test2", Id = 2, Role = "Director" };
+            _userMock.Setup(x => x.Update(It.IsAny<int>(), It.IsAny<User>())).ReturnsAsync(expectedInvalidReturn);
+            _userMock.Setup(x => x.Update(It.Is<int>(y => y.Equals(user.Id)), It.IsAny<User>())).ReturnsAsync(expectedValidReturn);
 
             // Act
-            var result = await _userMock.Object.Update(user.Id, user);
+            var controller = new UsersController(_userMock.Object);
+
+            var result = await controller.UpdateUser(user2);
 
             // Assert
-            Assert.Equal((-1), result);
-        }*/
+            var notFoundObjectResult = Assert.IsType<NotFoundObjectResult>(result);
+            var updateResult = Assert.IsType<AssetManagerBackend.DTO.ActionResponse>(notFoundObjectResult.Value);
+            Assert.False(updateResult.Success);
+            Assert.Equal("User not found", updateResult.Title);
+            Assert.Equal("There is no user for this id.", updateResult.Message);
+        }
 
         [Fact]
         public async Task Users_Delete_ReturnsValidDeleted()
         {
             // Arrange
-            int expectedReturn = 1;
+            int expectedValidReturn = 1;
+            int expectedInvalidReturn = -1;
             int userId = 1;
-            _userMock.Setup(x => x.Delete(userId)).ReturnsAsync(expectedReturn);
+            _userMock.Setup(x => x.Delete(It.IsAny<int>())).ReturnsAsync(expectedInvalidReturn);
+            _userMock.Setup(x => x.Delete(It.Is<int>(y => y.Equals(userId)))).ReturnsAsync(expectedValidReturn);
 
             // Act
-            var result = await _userMock.Object.Delete(userId);
+            var controller = new UsersController(_userMock.Object);
+
+            var result = await controller.DeleteUser(userId);
 
             // Assert
-            Assert.NotEqual((-1), result);
-            Assert.Equal(expectedReturn, result);
+            var okObjectResult = Assert.IsType<OkObjectResult>(result);
+            var deleteResult = Assert.IsType<AssetManagerBackend.DTO.ActionResponse>(okObjectResult.Value);
+            Assert.True(deleteResult.Success);
+            Assert.Equal("Deletion successful", deleteResult.Title);
+            Assert.Equal("You have deleted a user.", deleteResult.Message);
         }
 
-        /*[Fact]
-        public async Task UserAccounts_Delete_ReturnsInvalidDeleted()
+        [Fact]
+        public async Task Users_Delete_ReturnsInvalidDeleted()
         {
             // Arrange
-            int expectedReturn = 1;
-            int userId = -1;
-            _userMock.Setup(x => x.Delete(userId)).ReturnsAsync(expectedReturn);
+            int expectedValidReturn = 1;
+            int expectedInvalidReturn = -1;
+            int userId = 1;
+            int userId2 = 2;
+            _userMock.Setup(x => x.Delete(It.IsAny<int>())).ReturnsAsync(expectedInvalidReturn);
+            _userMock.Setup(x => x.Delete(It.Is<int>(y => y.Equals(userId)))).ReturnsAsync(expectedValidReturn);
 
             // Act
-            var result = await _userMock.Object.Delete(userId);
+            var controller = new UsersController(_userMock.Object);
+
+            var result = await controller.DeleteUser(userId2);
 
             // Assert
-            Assert.Equal((-1), result);
-        }*/
+            var notFoundObjectResult = Assert.IsType<NotFoundObjectResult>(result);
+            var deleteResult = Assert.IsType<AssetManagerBackend.DTO.ActionResponse>(notFoundObjectResult.Value);
+            Assert.False(deleteResult.Success);
+            Assert.Equal("User not found", deleteResult.Title);
+            Assert.Equal("There is no user for this id.", deleteResult.Message);
+        }
     }
 }

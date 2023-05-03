@@ -1,4 +1,5 @@
-﻿using AssetManagerBackend.Interfaces;
+﻿using AssetManagerBackend.DTO;
+using AssetManagerBackend.Interfaces;
 using AssetManagerBackend.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,11 +28,14 @@ namespace AssetManagerBackend.Controllers
             UserAccount? userAccount = await _repository.IsUserAccountExist(login.Username!, login.Email!, login.Password!);
             if (userAccount == null)
             {
-                return NotFound(new DTO.ActionResult
+                return NotFound(new DTO.LoginResult
                 {
                     Success = false,
                     Title = "Wrong credentials",
-                    Message = "Incorrect password or the user account does not exist."
+                    Message = "Incorrect password or the user account does not exist.",
+                    Username = "",
+                    Token = "test-token",
+                    ExpiresIn = 0
                 });
             }
             return Ok(new DTO.LoginResult
@@ -57,14 +61,14 @@ namespace AssetManagerBackend.Controllers
             var res = await _repository.Delete(id);
             if (res == -1)
             {
-                return NotFound(new DTO.ActionResult
+                return NotFound(new DTO.ActionResponse
                 {
                     Success = false,
                     Title = "Something went wrong",
                     Message = "Oops, something went wrong server side. Please try again later."
                 });
             }
-            return Ok(new DTO.ActionResult
+            return Ok(new DTO.ActionResponse
             {
                 Success = true,
                 Title = "Deletion successful",
@@ -78,11 +82,14 @@ namespace AssetManagerBackend.Controllers
             var res = await _repository.Create(usrAcnt);
             if (res == -1)
             {
-                return NotFound(new DTO.ActionResult
+                return NotFound(new DTO.LoginResult
                 {
                     Success = false,
                     Title = "Something went wrong",
-                    Message = "Oops, something went wrong server side. Please try again later."
+                    Message = "Oops, something went wrong server side. Please try again later.",
+                    Username = "",
+                    Token = "test-token",
+                    ExpiresIn = 0
                 });
             }
             return Ok(new DTO.LoginResult
@@ -97,19 +104,19 @@ namespace AssetManagerBackend.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUserAccount(UserAccount newUsrAcnt)
+        public async Task<ActionResult> UpdateUserAccount(UserAccount newUsrAcnt)
         {
             var res = await _repository.Update(newUsrAcnt.Id, newUsrAcnt);
             if (res == -1)
             {
-                return NotFound(new DTO.ActionResult
+                return NotFound(new DTO.ActionResponse
                 {
                     Success = false,
                     Title = "Something went wrong",
                     Message = "Oops, something went wrong server side. Please try again later."
                 });
             }
-            return Ok(new DTO.ActionResult
+            return Ok(new DTO.ActionResponse
             {
                 Success = true,
                 Title = "Update successful",

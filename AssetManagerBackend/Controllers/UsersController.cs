@@ -33,14 +33,14 @@ namespace AssetManagerBackend.Controllers
             var res = await _repository.Delete(id);
             if (res == -1)
             {
-                return NotFound(new DTO.ActionResult
+                return NotFound(new DTO.ActionResponse
                 {
                     Success = false,
-                    Title = "Something went wrong",
-                    Message = "Oops, something went wrong server side. Please try again later."
+                    Title = "User not found",
+                    Message = "There is no user for this id."
                 });
             }
-            return Ok(new DTO.ActionResult
+            return Ok(new DTO.ActionResponse
             {
                 Success = true,
                 Title = "Deletion successful",
@@ -54,14 +54,14 @@ namespace AssetManagerBackend.Controllers
             var res = await _repository.Create(usr);
             if (res == -1)
             {
-                return NotFound(new DTO.ActionResult
+                return NotFound(new DTO.ActionResponse
                 {
                     Success = false,
                     Title = "Something went wrong",
                     Message = "Oops, something went wrong server side. Please try again later."
                 });
             }
-            return Ok(new DTO.ActionResult
+            return Ok(new DTO.ActionResponse
             {
                 Success = true,
                 Title = "Creation successful",
@@ -75,14 +75,14 @@ namespace AssetManagerBackend.Controllers
             var res = await _repository.Update(newUsr.Id, newUsr);
             if (res == -1)
             {
-                return NotFound(new DTO.ActionResult
+                return NotFound(new DTO.ActionResponse
                 {
                     Success = false,
-                    Title = "Something went wrong",
-                    Message = "Oops, something went wrong server side. Please try again later."
+                    Title = "User not found",
+                    Message = "There is no user for this id."
                 });
             }
-            return Ok(new DTO.ActionResult
+            return Ok(new DTO.ActionResponse
             {
                 Success = true,
                 Title = "Update successful",
