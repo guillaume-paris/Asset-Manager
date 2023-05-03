@@ -33,14 +33,14 @@ namespace AssetManagerBackend.Controllers
             var res = await _repository.Delete(id);
             if (res == -1)
             {
-                return NotFound(new DTO.DTO.ActionResult
+                return NotFound(new DTO.ActionResult
                 {
                     Success = false,
                     Title = "Something went wrong",
                     Message = "Oops, something went wrong server side. Please try again later."
                 });
             }
-            return Ok(new DTO.DTO.ActionResult
+            return Ok(new DTO.ActionResult
             {
                 Success = true,
                 Title = "Deletion successful",
@@ -54,14 +54,14 @@ namespace AssetManagerBackend.Controllers
             var res = await _repository.Create(asst);
             if (res == -1)
             {
-                return NotFound(new DTO.DTO.ActionResult
+                return NotFound(new DTO.ActionResult
                 {
                     Success = false,
                     Title = "Something went wrong",
                     Message = "Oops, something went wrong server side. Please try again later."
                 });
             }
-            return Ok(new DTO.DTO.ActionResult
+            return Ok(new DTO.ActionResult
             {
                 Success = true,
                 Title = "Creation successful",
@@ -75,14 +75,14 @@ namespace AssetManagerBackend.Controllers
             var res = await _repository.Update(newAsst.Id, newAsst);
             if (res == -1)
             {
-                return NotFound(new DTO.DTO.ActionResult
+                return NotFound(new DTO.ActionResult
                 {
                     Success = false,
                     Title = "Something went wrong",
                     Message = "Oops, something went wrong server side. Please try again later."
                 });
             }
-            return Ok(new DTO.DTO.ActionResult
+            return Ok(new DTO.ActionResult
             {
                 Success = true,
                 Title = "Update successful",

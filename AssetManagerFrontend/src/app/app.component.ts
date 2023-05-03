@@ -20,9 +20,9 @@ export class AppComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router, private toastService: GenericToastService) { }
   
   ngOnInit(): void {
-    const toastTrigger = document.getElementById('liveToastBtn')
-    const toastLiveExample = document.getElementById('liveToast')
-
+    const toastTrigger = document.getElementById('liveToastBtn');
+    const toastLiveExample = document.getElementById('liveToast');
+  
     if (toastTrigger && toastLiveExample) {
       const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
       toastTrigger.addEventListener('click', () => {

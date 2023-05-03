@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 
 import { SharedModule } from 'src/_shared/shared.module';
 import { ComponentsModule } from './components/components.module';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,9 @@ import { ComponentsModule } from './components/components.module';
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts'), // or import('./path-to-my-custom-echarts')
+    }),
     ComponentsModule
   ],
   providers: [],

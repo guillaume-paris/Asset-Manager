@@ -1,0 +1,29 @@
+# Visual Studio Code
+.vscode/
+.vs/*
+/.vs
+*.suo
+
+# Build output
+bin/
+obj/
+
+# Test files
+TestResults/
+
+# User-specific files
+*.user
+
+# Package files
+*.nupkg
+*.snupkg
+*.sw*
+*.pfx
+
+# Log files
+*.log
+*.logs
+
+# Other files and directories to ignore
+.DS_Store
+Thumbs.db

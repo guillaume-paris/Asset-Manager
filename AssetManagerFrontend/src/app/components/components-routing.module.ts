@@ -21,6 +21,11 @@ const routes: Routes = [
     path: 'asset-management',
     canActivate: [AuthGuard],
     loadChildren: () => import('./asset-management/asset-management.module').then(m => m.AssetManagementModule)
+  },
+  {
+    path: 'statistics',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./statistics/statistics.module').then(m => m.StatisticsModule)
   }
 ];
 
