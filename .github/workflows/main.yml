@@ -35,6 +35,7 @@ jobs:
       
         # set report file and title 
       - name: Set Test Title
+        working-directory: ./AssetManagerBackend
         run: | 
               if ${{ github.event_name == 'pull_request' }}
               then
@@ -47,10 +48,12 @@ jobs:
         
         # run tests with built project
       - name: Test PR      
+        working-directory: ./AssetManagerBackend
         run: dotnet test --no-restore --no-build --configuration $config --logger:"liquid.md;LogFileName=${{github.workspace}}/${{env.file_name}};Title=${{env.title}};"
         
         # upload report as build artifact
       - name: Upload a Build Artifact
+        working-directory: ./AssetManagerBackend
         uses: actions/upload-artifact@v2
         if: ${{always()}}
         with:
@@ -59,6 +62,7 @@ jobs:
         
         # add report as PR comment (if PR)
       - name: comment PR
+        working-directory: ./AssetManagerBackend
         uses: machine-learning-apps/pr-comment@master
         if: ${{ github.event_name == 'pull_request' }}
         env:
