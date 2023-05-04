@@ -1,17 +1,30 @@
 .statistic-card {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     border-radius: 20px;
     box-shadow: 0px 0px 20px 0px #8b7979;
-    width: 200px;
+    min-width: 200px;
     height: 200px;
 }
 
 .user-statistic-card-color {
-    background-image: linear-gradient(to bottom, #ffffff00 0%, #ffffff00 50%, #1abb14 150%);
+    background-image: linear-gradient(to bottom, #ffffff00 0%, #ffffff00 50%, #1abb14 200%);
 }
 
 .asset-statistic-card-color {
-    background-image: linear-gradient(to bottom, #ffffff00 0%, #ffffff00 50%, #145cbb 150%);
+    background-image: linear-gradient(to bottom, #ffffff00 0%, #ffffff00 50%, #145cbb 200%);
+}
+
+.free-asset-statistic-card-color {
+    background-image: linear-gradient(to bottom, #ffffff00 0%, #ffffff00 50%, #a08613 200%);
+}
+
+.asset-management-statistic-card-color {
+    background-image: linear-gradient(to bottom, #ffffff00 0%, #ffffff00 50%, #791468 200%);
+}
+
+.number-statistic-card-color {
+    font-size: 5rem;
 }

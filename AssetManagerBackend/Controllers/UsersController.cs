@@ -21,6 +21,24 @@ namespace AssetManagerBackend.Controllers
             return _repository.GetAll().ToList();
         }
 
+        [HttpGet("pagination")]
+        public IActionResult GetUsers(int pageIndex = 1, int pageSize = 10)
+        {
+            var totalUsers = _repository.GetAll().Count();
+            var usersPaged = _repository.GetAll()
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var result = new
+            {
+                totalUsers,
+                usersPaged
+            };
+
+            return Ok(result);
+        }
+
         [HttpGet("{id}")]
         public async Task<User?> GetUser(int id)
         {

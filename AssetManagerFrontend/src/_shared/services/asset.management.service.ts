@@ -3,10 +3,10 @@ import { IGenericTable, IGenericTableRow } from '../models/generic-crud-table.mo
 import data from '../../app/config/asset.management.config.json'
 import { AssetService } from './asset.service';
 import { UserService } from './user.service';
-import { IAssetManagement } from '../models/asset.management.model';
+import { IAssetManagement, IAssetManagementResult } from '../models/asset.management.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IResponse } from '../models/api.model';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 @Injectable()
 export class AssetManagementService {
@@ -65,6 +65,25 @@ export class AssetManagementService {
     });
     this.assetsManagement.rows = assetsManagement;
     return this.assetsManagement;
+  }
+
+  getAssetsManagementPagination(pageIndex: number, pageSize: number): Observable<{totalAssetsManagement: number, assetsManagement: IGenericTable}> {
+    const URL: string = "http://localhost:61150/api/AssetManagements/pagination?pageIndex=" + pageIndex.toString() + "&pageSize=" + pageSize.toString();
+    const assetsManagement: IGenericTable = this.assetsManagement;
+    const listAssetManagement: IGenericTableRow[] = [];
+
+    return this.http.get<IAssetManagementResult>(URL).pipe(map((data: IAssetManagementResult) => {
+      const totalAssetsManagement: number = data.totalAssetsManagement;
+      data.assetsManagementPaged.forEach((assetManagement) => {
+        const rowAssetManagement: IGenericTableRow = {
+          values: [assetManagement.user, assetManagement.asset],
+          id: assetManagement.id
+        }
+        listAssetManagement.push(rowAssetManagement);
+      })
+      assetsManagement.rows = listAssetManagement;
+      return {totalAssetsManagement, assetsManagement};
+    }));
   }
   
   createAssetManagement(newAssetManagement: IGenericTableRow): Observable<IResponse> {

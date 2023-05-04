@@ -7,3 +7,10 @@ export interface IAsset {
     category: string;
     id: number;
 }
+
+export interface IAssetResult {
+    totalAssets: number,
+    assetsPaged: [
+        IAsset
+    ]
+}

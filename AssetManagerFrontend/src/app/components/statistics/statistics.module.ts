@@ -13,9 +13,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
   imports: [
     CommonModule,
     SharedModule,
-    NgxEchartsModule.forRoot({
-      echarts: () => import('echarts'), // or import('./path-to-my-custom-echarts')
-    }),
+    NgxEchartsModule,
     StatisticsRoutingModule
   ]
 })

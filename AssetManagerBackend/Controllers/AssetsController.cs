@@ -27,6 +27,24 @@ namespace AssetManagerBackend.Controllers
             return await _repository.GetById(id);
         }
 
+        [HttpGet("pagination")]
+        public IActionResult GetAssets(int pageIndex = 1, int pageSize = 10)
+        {
+            var totalAssets = _repository.GetAll().Count();
+            var assetsPaged = _repository.GetAll()
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var result = new
+            {
+                totalAssets,
+                assetsPaged
+            };
+
+            return Ok(result);
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsset(int id)
         {

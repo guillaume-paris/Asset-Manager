@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { IGenericTable, IGenericTableRow } from '../models/generic-crud-table.model';
 import data from '../../app/config/asset.config.json'
 import { IResponse } from '../models/api.model';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { IAsset } from '../models/asset.model';
+import { IAsset, IAssetResult } from '../models/asset.model';
 
 @Injectable()
 export class AssetService {
@@ -31,6 +31,25 @@ export class AssetService {
     });
     this.assets.rows = assets;
     return this.assets;
+  }
+
+  getAssetsPagination(pageIndex: number, pageSize: number): Observable<{totalAssets: number, assets: IGenericTable}> {
+    const URL: string = "http://localhost:61150/api/Assets/pagination?pageIndex=" + pageIndex.toString() + "&pageSize=" + pageSize.toString();
+    const assets: IGenericTable = this.assets;
+    const listAsset: IGenericTableRow[] = [];
+
+    return this.http.get<IAssetResult>(URL).pipe(map((data: IAssetResult) => {
+      const totalAssets: number = data.totalAssets;
+      data.assetsPaged.forEach((asset) => {
+        const rowAsset: IGenericTableRow = {
+          values: [asset.name, asset.description, asset.brand, asset.price, asset.quantity, asset.category],
+          id: asset.id
+        }
+        listAsset.push(rowAsset);
+      })
+      assets.rows = listAsset;
+      return {totalAssets, assets};
+    }));
   }
   
   createAsset(newAsset: IGenericTableRow): Observable<IResponse> {

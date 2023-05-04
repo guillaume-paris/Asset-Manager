@@ -8,7 +8,7 @@ import { UserService } from './services/user.service';
 import { AssetService } from './services/asset.service';
 import { GenericCrudTableModule } from './generic-crud-table/generic-crud-table.module';
 import { AssetManagementService } from './services/asset.management.service';
-
+import { StatisticService } from './services/statistic.service';
 
 @NgModule({
   declarations: [
@@ -29,7 +29,8 @@ import { AssetManagementService } from './services/asset.management.service';
     GenericToastService,
     UserService,
     AssetService,
-    AssetManagementService
+    AssetManagementService,
+    StatisticService
   ]
 })
 export class SharedModule { }

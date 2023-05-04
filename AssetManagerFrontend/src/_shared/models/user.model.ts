@@ -5,3 +5,10 @@ export interface IUser {
     role: string;
     id: number;
 }
+
+export interface IUserResult {
+    totalUsers: number,
+    usersPaged: [
+        IUser
+    ]
+}

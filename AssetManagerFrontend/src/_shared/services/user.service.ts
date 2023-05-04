@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IUser } from '../models/user.model';
+import { IUser, IUserResult } from '../models/user.model';
 import { IGenericTable, IGenericTableRow } from '../models/generic-crud-table.model';
 import data from '../../app/config/user.config.json'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -10,6 +10,7 @@ import { IResponse } from '../models/api.model';
 export class UserService {
 
   users: IGenericTable;
+  numberOfUsers: number = 0;
 
   constructor(private http: HttpClient) {
     // Load data from the json file
@@ -32,7 +33,26 @@ export class UserService {
     this.users.rows = users;
     return this.users;
   }
-  
+
+  getUsersPagination(pageIndex: number, pageSize: number): Observable<{totalUsers: number, users: IGenericTable}> {
+    const URL: string = "http://localhost:61150/api/Users/pagination?pageIndex=" + pageIndex.toString() + "&pageSize=" + pageSize.toString();
+    const users: IGenericTable = this.users;
+    const listUser: IGenericTableRow[] = [];
+    
+    return this.http.get<IUserResult>(URL).pipe(map((data: IUserResult) => {
+      const totalUsers: number = data.totalUsers;
+      data.usersPaged.forEach((user) => {
+        const rowUser: IGenericTableRow = {
+          values: [user.firstName, user.lastName, user.email, user.role],
+          id: user.id
+        }
+        listUser.push(rowUser);
+      })
+      users.rows = listUser;
+      return {totalUsers, users};
+    }));
+  }
+
   createUser(newUser: IGenericTableRow): Observable<IResponse> {
     const URL: string = "http://localhost:61150/api/Users";
     const body = JSON.stringify({

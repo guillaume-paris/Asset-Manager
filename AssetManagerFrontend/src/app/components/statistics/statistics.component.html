@@ -1,15 +1,19 @@
 <div class="d-flex justify-content-center gap-5 mt-5">
     <div class="statistic-card user-statistic-card-color">
-        <label class="fs-4">User</label>
-    </div>
-    <div class="statistic-card user-statistic-card-color">
-        <label class="fs-4">Free user</label>
+        <label class="number-statistic-card-color fw-bold px-3">{{totalUsers}}</label>
+        <label class="fs-4">Users</label>
     </div>
     <div class="statistic-card asset-statistic-card-color">
-        <label class="fs-4">Asset</label>
+        <label class="number-statistic-card-color fw-bold px-3">{{totalAssets}}</label>
+        <label class="fs-4">Assets</label>
     </div>
-    <div class="statistic-card asset-statistic-card-color">
-        <label class="fs-4">Free Asset</label>
+    <div class="statistic-card free-asset-statistic-card-color">
+        <label class="number-statistic-card-color fw-bold px-3">{{freeAssets}}</label>
+        <label class="fs-4">Free Assets</label>
+    </div>
+    <div class="statistic-card asset-management-statistic-card-color">
+        <label class="number-statistic-card-color fw-bold px-3">{{totalAssetsManagement}}</label>
+        <label class="fs-4">Assets linked</label>
     </div>
 </div>
 <div echarts [options]="chartOption" class="demo-chart"></div>
