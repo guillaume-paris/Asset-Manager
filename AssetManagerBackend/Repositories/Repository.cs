@@ -41,8 +41,7 @@ namespace AssetManagerBackend.Repositories
 
         public async Task<int> Create(TEntity entity)
         {
-            int maxId = await _context.Set<TEntity>().MaxAsync(e => (int?)e.Id) ?? 0;
-            entity.Id = maxId + 1;
+            entity.CreatedAt = DateTime.UtcNow;
             await _context.Set<TEntity>().AddAsync(entity);
             await _context.SaveChangesAsync();
             return entity.Id;

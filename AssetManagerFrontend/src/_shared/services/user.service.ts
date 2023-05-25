@@ -24,7 +24,7 @@ export class UserService {
     this.http.get<Array<IUser>>(URL).subscribe((data: Array<IUser>) => {
       data.forEach((user) => {
         const rowUser: IGenericTableRow = {
-          values: [user.firstName, user.lastName, user.email, user.role],
+          values: [user.firstName, user.lastName, user.email, user.role, user.createdAt.substring(0, 19).replace('T', ' '), user.createdBy = "null"],
           id: user.id
         }
         users.push(rowUser);
@@ -32,6 +32,17 @@ export class UserService {
     });
     this.users.rows = users;
     return this.users;
+  }
+
+  getUsersTest(): Observable<IGenericTable> {
+    const URL: string = "http://localhost:61150/api/Users";
+    return this.http.get<IGenericTable>(URL);
+  }
+
+  getUserCount(): Observable<number> {
+    const URL: string = "http://localhost:61150/api/Users/count";
+
+    return this.http.get<number>(URL);
   }
 
   getUsersPagination(pageIndex: number, pageSize: number): Observable<{totalUsers: number, users: IGenericTable}> {
@@ -43,7 +54,7 @@ export class UserService {
       const totalUsers: number = data.totalUsers;
       data.usersPaged.forEach((user) => {
         const rowUser: IGenericTableRow = {
-          values: [user.firstName, user.lastName, user.email, user.role],
+          values: [user.firstName, user.lastName, user.email, user.role, user.createdAt.substring(0, 19).replace('T', ' '), user.createdBy = "null"],
           id: user.id
         }
         listUser.push(rowUser);

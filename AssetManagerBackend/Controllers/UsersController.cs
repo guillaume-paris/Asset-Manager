@@ -1,11 +1,13 @@
 ﻿using AssetManagerBackend.Interfaces;
 using AssetManagerBackend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssetManagerBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IRepository<User> _repository;
@@ -19,6 +21,12 @@ namespace AssetManagerBackend.Controllers
         public List<User> GetUsers()
         {
             return _repository.GetAll().ToList();
+        }
+
+        [HttpGet("count")]
+        public int GetUserCount()
+        {
+            return _repository.GetAll().Count();
         }
 
         [HttpGet("pagination")]

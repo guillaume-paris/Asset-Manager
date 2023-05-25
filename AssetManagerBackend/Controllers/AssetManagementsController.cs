@@ -1,11 +1,13 @@
 ﻿using AssetManagerBackend.Interfaces;
 using AssetManagerBackend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssetManagerBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AssetManagementsController : ControllerBase
     {
         private readonly IRepository<AssetManagement> _repository;
@@ -19,6 +21,12 @@ namespace AssetManagerBackend.Controllers
         public List<AssetManagement> GetAssetManagements()
         {
             return _repository.GetAll().ToList();
+        }
+
+        [HttpGet("count")]
+        public int GetAssetManagementCount()
+        {
+            return _repository.GetAll().Count();
         }
 
         [HttpGet("{id}")]

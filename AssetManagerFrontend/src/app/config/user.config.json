@@ -15,6 +15,14 @@
         {
             "name": "role",
             "isActive": true
+        },
+        {
+            "name": "created at",
+            "isActive": true
+        },
+        {
+            "name": "created by",
+            "isActive": true
         }
     ],
     "rows": []

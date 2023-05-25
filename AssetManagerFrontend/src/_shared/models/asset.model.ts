@@ -3,8 +3,9 @@ export interface IAsset {
     description: string;
     brand: string;
     price: string;
-    quantity: string;
     category: string;
+    createdAt: string;
+    createdBy: string;
     id: number;
 }
 

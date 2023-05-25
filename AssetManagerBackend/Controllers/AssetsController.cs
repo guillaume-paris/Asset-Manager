@@ -1,18 +1,23 @@
 ﻿using AssetManagerBackend.Interfaces;
 using AssetManagerBackend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Security;
 
 namespace AssetManagerBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AssetsController : ControllerBase
     {
         private readonly IRepository<Asset> _repository;
+        private readonly IAssetRepository _assetRepository;
 
-        public AssetsController(IRepository<Asset> repository)
+        public AssetsController(IRepository<Asset> repository, IAssetRepository assetRepository)
         {
             _repository = repository;
+            _assetRepository = assetRepository;
         }
 
         [HttpGet]
@@ -21,10 +26,30 @@ namespace AssetManagerBackend.Controllers
             return _repository.GetAll().ToList();
         }
 
+        [HttpGet("count")]
+        public int GetAssetCount()
+        {
+            return _repository.GetAll().Count();
+        }
+
         [HttpGet("{id}")]
         public async Task<Asset?> GetAsset(int id)
         {
             return await _repository.GetById(id);
+        }
+
+        [HttpGet("free")]
+        public async Task<IActionResult> GetFreeAssets()
+        {
+            var (freeAssets, count) = await _assetRepository.GetFreeAssets();
+            return Ok(new { freeAssets });
+        }
+
+        [HttpGet("free/count")]
+        public async Task<int> GetFreeAssetCount()
+        {
+            var (freeAssets, count) = await _assetRepository.GetFreeAssets();
+            return count;
         }
 
         [HttpGet("pagination")]

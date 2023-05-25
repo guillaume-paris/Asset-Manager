@@ -35,13 +35,6 @@
                 </div>
               </div>
               <div class="mb-3">
-                <label for="role" class="form-label">Quantity</label>
-                <input type="text" class="form-control" formControlName="quantity" placeholder="Enter quantity">
-                <div *ngIf="editAssetForm.get('quantity')?.touched && editAssetForm.get('quantity')?.value === ''" class="text-danger">
-                  <small class="text-danger">Please enter a role</small>
-                </div>
-              </div>
-              <div class="mb-3">
                 <label for="role" class="form-label">Category</label>
                 <input type="text" class="form-control" formControlName="category" placeholder="Enter category">
                 <div *ngIf="editAssetForm.get('category')?.touched && editAssetForm.get('category')?.value === ''" class="text-danger">

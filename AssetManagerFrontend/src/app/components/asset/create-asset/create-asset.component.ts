@@ -18,7 +18,6 @@ export class CreateAssetComponent {
     description: new FormControl('', Validators.required),
     brand: new FormControl('', Validators.required),
     price: new FormControl('', Validators.required),
-    quantity: new FormControl('', Validators.required),
     category: new FormControl('', Validators.required)
   });
 
@@ -40,7 +39,6 @@ export class CreateAssetComponent {
         this.createAssetForm.value.description,
         this.createAssetForm.value.brand,
         this.createAssetForm.value.price,
-        this.createAssetForm.value.quantity,
         this.createAssetForm.value.category
       ],
       id: 0

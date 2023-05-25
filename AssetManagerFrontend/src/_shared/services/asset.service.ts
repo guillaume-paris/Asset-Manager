@@ -23,7 +23,7 @@ export class AssetService {
     this.http.get<Array<IAsset>>(URL).subscribe((data: Array<IAsset>) => {
       data.forEach((asset) => {
         const rowAsset: IGenericTableRow = {
-          values: [asset.name, asset.description, asset.brand, asset.price, asset.quantity, asset.category],
+          values: [asset.name, asset.description, asset.brand, asset.price, asset.category, asset.createdAt.substring(0, 19).replace('T', ' '), asset.createdBy = "null"],
           id: asset.id
         }
         assets.push(rowAsset);
@@ -31,6 +31,12 @@ export class AssetService {
     });
     this.assets.rows = assets;
     return this.assets;
+  }
+
+  getAssetCount(): Observable<number> {
+    const URL: string = "http://localhost:61150/api/Assets/count";
+
+    return this.http.get<number>(URL);
   }
 
   getAssetsPagination(pageIndex: number, pageSize: number): Observable<{totalAssets: number, assets: IGenericTable}> {
@@ -42,7 +48,7 @@ export class AssetService {
       const totalAssets: number = data.totalAssets;
       data.assetsPaged.forEach((asset) => {
         const rowAsset: IGenericTableRow = {
-          values: [asset.name, asset.description, asset.brand, asset.price, asset.quantity, asset.category],
+          values: [asset.name, asset.description, asset.brand, asset.price, asset.category, asset.createdAt.substring(0, 19).replace('T', ' '), asset.createdBy = "null"],
           id: asset.id
         }
         listAsset.push(rowAsset);
@@ -50,6 +56,17 @@ export class AssetService {
       assets.rows = listAsset;
       return {totalAssets, assets};
     }));
+  }
+
+  getFreeAssets(): Observable<{freeAssets: Array<IAsset>}> {
+    const URL: string = "http://localhost:61150/api/Assets/free";
+    return this.http.get<{freeAssets: Array<IAsset>}>(URL);
+  }
+
+  getFreeAssetCount(): Observable<number> {
+    const URL: string = "http://localhost:61150/api/Assets/free/count";
+
+    return this.http.get<number>(URL);
   }
   
   createAsset(newAsset: IGenericTableRow): Observable<IResponse> {
@@ -60,8 +77,7 @@ export class AssetService {
       description: newAsset.values[1],
       brand: newAsset.values[2],
       price: newAsset.values[3],
-      quantity: newAsset.values[4],
-      category: newAsset.values[5]
+      category: newAsset.values[4],
     });
     
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -75,8 +91,7 @@ export class AssetService {
       description: updatedAsset.values[1],
       brand: updatedAsset.values[2],
       price: updatedAsset.values[3],
-      quantity: updatedAsset.values[4],
-      category: updatedAsset.values[5],
+      category: updatedAsset.values[4],
       id: id,
     });
   

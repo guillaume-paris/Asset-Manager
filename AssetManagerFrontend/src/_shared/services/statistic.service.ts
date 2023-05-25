@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { AssetService } from './asset.service';
 import { UserService } from './user.service';
 import { IGenericTable, IGenericTableRow } from '../models/generic-crud-table.model';
-import { IUserResult } from '../models/user.model';
 import { Observable } from 'rxjs';
 import { AssetManagementService } from './asset.management.service';
+import { IAsset } from '../models/asset.model';
+import { SignalRService } from './signalr.service';
 
 @Injectable()
 export class StatisticService {
@@ -17,7 +18,12 @@ export class StatisticService {
     totalOfAsset: number = 0;
     freeAssets: number = 0;
   
-    constructor(private assetService: AssetService, private userService: UserService, private assetManagementService: AssetManagementService) {
+    constructor(private assetService: AssetService, private userService: UserService, private assetManagementService: AssetManagementService, public signalRService: SignalRService) {
+    }
+
+    ngOnInit(): void {
+        this.signalRService.startConnection();
+        this.signalRService.addTransferUserListener();
     }
 
     getUsers(): Observable<{totalUsers: number, users: IGenericTable}> {
@@ -30,5 +36,25 @@ export class StatisticService {
 
     getAssetsManagement(): Observable<{totalAssetsManagement: number, assetsManagement: IGenericTable}> {
         return this.assetManagementService.getAssetsManagementPagination(1, 10);
+    }
+
+    getFreeAssets(): Observable<{freeAssets: Array<IAsset>}> {
+        return this.assetService.getFreeAssets();
+    }
+
+    getFreeAssetCount(): Observable<number> {
+        return this.assetService.getFreeAssetCount();
+    }
+
+    getUserCount(): Observable<number> {
+        return this.userService.getUserCount();
+    }
+
+    getAssetCount(): Observable<number> {
+        return this.assetService.getAssetCount();
+    }
+
+    getAssetManagementCount(): Observable<number> {
+        return this.assetManagementService.getAssetManagementCount();
     }
 }

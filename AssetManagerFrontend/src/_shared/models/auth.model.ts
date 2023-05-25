@@ -4,7 +4,7 @@ export interface ILogin {
     message: string;
     username: string;
     token: string;
-    expires_in: number;
+    expiresIn: number;
 }
 
 export interface IRegister {
@@ -13,7 +13,7 @@ export interface IRegister {
     message: string;
     username: string;
     token: string;
-    expires_in: number;
+    expiresIn: number;
 }
 
 export interface ILogout {

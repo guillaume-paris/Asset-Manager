@@ -17,11 +17,15 @@
             "isActive": true
         },
         {
-            "name": "quantity",
+            "name": "category",
             "isActive": true
         },
         {
-            "name": "category",
+            "name": "created at",
+            "isActive": true
+        },
+        {
+            "name": "created by",
             "isActive": true
         }
     ],

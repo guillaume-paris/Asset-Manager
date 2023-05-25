@@ -19,7 +19,6 @@ export class UpdateAssetComponent implements OnInit {
     description: new FormControl('', Validators.required),
     brand: new FormControl('', Validators.required),
     price: new FormControl('', Validators.required),
-    quantity: new FormControl('', Validators.required),
     category: new FormControl('', Validators.required)
   });
 
@@ -31,8 +30,7 @@ export class UpdateAssetComponent implements OnInit {
       description: this.row.values[1],
       brand: this.row.values[2],
       price: this.row.values[3],
-      quantity: this.row.values[4],
-      category: this.row.values[5]
+      category: this.row.values[4]
     });
   }
 
@@ -52,7 +50,6 @@ export class UpdateAssetComponent implements OnInit {
         this.editAssetForm.value.description,
         this.editAssetForm.value.brand,
         this.editAssetForm.value.price,
-        this.editAssetForm.value.quantity,
         this.editAssetForm.value.category
       ],
       id: this.row.id

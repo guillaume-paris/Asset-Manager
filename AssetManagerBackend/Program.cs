@@ -7,14 +7,47 @@ using Microsoft.Extensions.Hosting;
 using AssetManagerBackend.Interfaces;
 using AssetManagerBackend.Repositories;
 using AssetManagerBackend.Databases;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using AssetManagerBackend.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
+var settings = builder.Configuration;
 
 // Add services to the container.
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter into field the word 'Bearer' following by space and JWT",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
+    });
+});
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",
@@ -26,8 +59,33 @@ builder.Services.AddCors(options =>
         });
 });
 
+var key = Encoding.ASCII.GetBytes(settings["JwtKey"]);
+var expiryDuration = int.Parse(settings["JwtExpiryDurationMinutes"]);
+
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
+
 builder.Services.AddScoped<IUserAccountRepository, UserAccountRepository>();
+builder.Services.AddScoped<IAssetRepository, AssetRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+// Pass expiryDuration to JwtBearerService
+builder.Services.AddScoped<IJwtBearerService, JwtBearerService>(provider =>
+    new JwtBearerService(provider.GetRequiredService<IConfiguration>(), expiryDuration));
 // Add EF Core DbContext to the container with in-memory database
 builder.Services.AddDbContext<AssetManagerDbContext>(options =>
     options.UseInMemoryDatabase(databaseName: "MyInMemoryDatabase"));
@@ -38,21 +96,18 @@ static void SeedData(AssetManagerDbContext context)
 {
     UserAccount userAccount1 = new()
     {
-        Id = 1,
         Username = "toto",
         Email = "toto@gmail.com",
         Password = "toto123"
     };
     UserAccount userAccount2 = new()
     {
-        Id = 2,
         Username = "tata",
         Email = "tata@gmail.com",
         Password = "tata123"
     };
     User user1 = new()
     {
-        Id = 1,
         FirstName = "Jackie",
         LastName = "Chan",
         Email = "j.chan@gmail.com",
@@ -60,7 +115,6 @@ static void SeedData(AssetManagerDbContext context)
     };
     User user2 = new()
     {
-        Id = 2,
         FirstName = "Patrick",
         LastName = "Fiori",
         Email = "p.fiori@gmail.com",
@@ -68,7 +122,6 @@ static void SeedData(AssetManagerDbContext context)
     };
     User user3 = new()
     {
-        Id = 3,
         FirstName = "Noe",
         LastName = "Arche",
         Email = "n.arche@gmail.com",
@@ -76,7 +129,6 @@ static void SeedData(AssetManagerDbContext context)
     };
     Asset asset1 = new()
     {
-        Id = 1,
         Name = "Iphone 14",
         Description = "Use to call your friend",
         Brand = "Apple",
@@ -86,7 +138,6 @@ static void SeedData(AssetManagerDbContext context)
     };
     Asset asset2 = new()
     {
-        Id = 2,
         Name = "Bag",
         Description = "Use to carry things",
         Brand = "Eastpack",
@@ -96,7 +147,6 @@ static void SeedData(AssetManagerDbContext context)
     };
     Asset asset3 = new()
     {
-        Id = 3,
         Name = "Pen",
         Description = "Use to write things",
         Brand = "BIC",
@@ -106,7 +156,6 @@ static void SeedData(AssetManagerDbContext context)
     };
     Asset asset4 = new()
     {
-        Id = 4,
         Name = "Highlighter",
         Description = "Use to highlight things",
         Brand = "BIC",
@@ -116,15 +165,13 @@ static void SeedData(AssetManagerDbContext context)
     };
     AssetManagement assetManagement1 = new()
     {
-        Id = 1,
-        User = "Jackie Chan",
-        Asset = "Bag"
+        User = user1,
+        Asset = asset2
     };
     AssetManagement assetManagement2 = new()
     {
-        Id = 2,
-        User = "Jackie Chan",
-        Asset = "Pen"
+        User = user1,
+        Asset = asset1
     };
     context.Add(userAccount1);
     context.Add(userAccount2);
@@ -140,7 +187,6 @@ static void SeedData(AssetManagerDbContext context)
     context.SaveChanges();
 }
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -149,6 +195,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowAllOrigins");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

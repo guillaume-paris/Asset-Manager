@@ -57,7 +57,7 @@ export class AssetManagementService {
     this.http.get<Array<IAssetManagement>>(URL).subscribe((data: Array<IAssetManagement>) => {
       data.forEach((assetManagement) => {
         const rowAssetManagement: IGenericTableRow = {
-          values: [assetManagement.user, assetManagement.asset],
+          values: [assetManagement.user, assetManagement.asset, assetManagement.createdAt.substring(0, 19).replace('T', ' '), assetManagement.createdBy = "null"],
           id: assetManagement.id
         }
         assetsManagement.push(rowAssetManagement);
@@ -65,6 +65,12 @@ export class AssetManagementService {
     });
     this.assetsManagement.rows = assetsManagement;
     return this.assetsManagement;
+  }
+
+  getAssetManagementCount(): Observable<number> {
+    const URL: string = "http://localhost:61150/api/AssetManagements/count";
+
+    return this.http.get<number>(URL);
   }
 
   getAssetsManagementPagination(pageIndex: number, pageSize: number): Observable<{totalAssetsManagement: number, assetsManagement: IGenericTable}> {
@@ -76,7 +82,7 @@ export class AssetManagementService {
       const totalAssetsManagement: number = data.totalAssetsManagement;
       data.assetsManagementPaged.forEach((assetManagement) => {
         const rowAssetManagement: IGenericTableRow = {
-          values: [assetManagement.user, assetManagement.asset],
+          values: [assetManagement.user, assetManagement.asset, assetManagement.createdAt.substring(0, 19).replace('T', ' '), assetManagement.createdBy = "null"],
           id: assetManagement.id
         }
         listAssetManagement.push(rowAssetManagement);

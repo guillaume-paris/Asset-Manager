@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import * as bootstrap from 'bootstrap';
 import { AuthService } from 'src/_shared/services/auth.service';
 import { GenericToastService } from 'src/_shared/services/generic-toast.service';
-import { Collapse } from 'bootstrap';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +16,9 @@ export class AppComponent implements OnInit {
 
   isLoggedIn: boolean = false;
   username: string | undefined;
-  
+
+  private subscription!: Subscription;
+
   constructor(private authService: AuthService, private router: Router, private toastService: GenericToastService) { }
   
   ngOnInit(): void {
@@ -29,6 +31,17 @@ export class AppComponent implements OnInit {
         toastBootstrap.show();
       });
     }
+
+    this.subscription = this.authService.loggedInStatus$.subscribe(
+        loggedInStatus => {
+            this.isLoggedIn = loggedInStatus;
+            this.username = loggedInStatus ? this.authService.getUsername() : '';
+        }
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   hideLoginModal(): void {
@@ -41,14 +54,12 @@ export class AppComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
-    this.isLoggedIn = false;
-    this.username = "";
-    this.router.navigate(['/']);
   }
 
   setConnected(username: any): void {
     if (username) {
       this.username = username;
+      localStorage.setItem('username', username);
       this.isLoggedIn = true;
     }
   }

@@ -7,6 +7,6 @@
         public string? Message { get; set; }
         public string? Username { get; set; }
         public string? Token { get; set; }
-        public int? ExpiresIn { get; set; }
+        public double? ExpiresIn { get; set; }
     }
 }

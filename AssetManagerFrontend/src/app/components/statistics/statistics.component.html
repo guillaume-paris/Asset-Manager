@@ -1,19 +1,50 @@
-<div class="d-flex justify-content-center gap-5 mt-5">
-    <div class="statistic-card user-statistic-card-color">
-        <label class="number-statistic-card-color fw-bold px-3">{{totalUsers}}</label>
-        <label class="fs-4">Users</label>
+<div class="d-flex justify-content-center mt-5" *ngIf="isUnavailable[0] && isUnavailable[1] && isUnavailable[2] && isUnavailable[3]">
+    <label class="text-danger fw-bold">You forgot to run the server !</label>
+</div>
+<div class="d-flex justify-content-center gap-5 m-5">
+    <div class="statistic-card user-statistic-card-color position-relative">
+        <div class="spinner-border spinner-size text-primary" role="status" *ngIf="isLoading[0]"></div>
+        <label class="number-statistic-card-color fw-bold px-3" *ngIf="isUnavailable[0]">N/A</label>
+        <label class="number-statistic-card-color fw-bold px-3" *ngIf="!isLoading[0] && !isUnavailable[0]">{{totalUsers}}</label>
+        <label class="fs-4 position-absolute fixed-bottom text-center mb-3">Users</label>
     </div>
-    <div class="statistic-card asset-statistic-card-color">
-        <label class="number-statistic-card-color fw-bold px-3">{{totalAssets}}</label>
-        <label class="fs-4">Assets</label>
+    <div class="statistic-card asset-statistic-card-color position-relative">
+        <div class="spinner-border spinner-size text-primary" role="status" *ngIf="isLoading[1]"></div>
+        <label class="number-statistic-card-color fw-bold px-3" *ngIf="isUnavailable[1]">N/A</label>
+        <label class="number-statistic-card-color fw-bold px-3" *ngIf="!isLoading[1] && !isUnavailable[1]">{{totalAssets}}</label>
+        <label class="fs-4 position-absolute fixed-bottom text-center mb-3">Assets</label>
     </div>
-    <div class="statistic-card free-asset-statistic-card-color">
-        <label class="number-statistic-card-color fw-bold px-3">{{freeAssets}}</label>
-        <label class="fs-4">Free Assets</label>
+    <div class="statistic-card free-asset-statistic-card-color position-relative">
+        <div class="spinner-border spinner-size text-primary" role="status" *ngIf="isLoading[2]"></div>
+        <label class="number-statistic-card-color fw-bold px-3" *ngIf="isUnavailable[2]">N/A</label>
+        <label class="number-statistic-card-color fw-bold px-3" *ngIf="!isLoading[2] && !isUnavailable[2]">{{freeAssets}}</label>
+        <label class="fs-4 position-absolute fixed-bottom text-center mb-3">Free Assets</label>
     </div>
-    <div class="statistic-card asset-management-statistic-card-color">
-        <label class="number-statistic-card-color fw-bold px-3">{{totalAssetsManagement}}</label>
-        <label class="fs-4">Assets linked</label>
+    <div class="statistic-card asset-management-statistic-card-color position-relative">
+        <div class="spinner-border spinner-size text-primary" role="status" *ngIf="isLoading[3]"></div>
+        <label class="number-statistic-card-color fw-bold px-3" *ngIf="isUnavailable[3]">N/A</label>
+        <label class="number-statistic-card-color fw-bold px-3" *ngIf="!isLoading[3] && !isUnavailable[3]">{{totalAssetsManagement}}</label>
+        <label class="fs-4 position-absolute fixed-bottom text-center mb-3">Assets linked</label>
     </div>
 </div>
-<div echarts [options]="chartOption" class="demo-chart"></div>
+<div class="pie-card">
+    <div class="historic-card mt-5 gap-5">
+        <label class="text-center fw-bold fs-1 px-5">Assets distribution</label>
+        <div echarts [options]="assetsPieChartOption" class="chart-style"></div>
+    </div>
+</div>
+<div class="d-flex gap-5 justify-content-center mb-5">
+    <div class="historic-card mt-5">
+        <label class="text-center fw-bold fs-1">User historic graph</label>
+        <div echarts [options]="usersChartOption"></div>
+    </div>
+    <div class="historic-card mt-5">
+        <label class="text-center fw-bold fs-1">Asset historic graph</label>
+        <div echarts [options]="assetsChartOption"></div>
+    </div>
+    <div class="historic-card mt-5">
+        <label class="text-center fw-bold fs-1">Asset links historic graph</label>
+        <div echarts [options]="assetsManagementChartOption"></div>
+    </div>
+</div>
+
