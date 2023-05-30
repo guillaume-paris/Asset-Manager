@@ -1,0 +1,15 @@
+version: '3'
+services:
+  assetmanagerbackend:
+    build:
+      context: ./AssetManagerBackend
+      dockerfile: Dockerfile
+    ports:
+      - "61150:80"
+
+  assetmanagerfrontend:
+    build:
+      context: ./AssetManagerFrontend
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"

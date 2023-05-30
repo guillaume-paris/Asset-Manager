@@ -2,6 +2,8 @@
 using AssetManagerBackend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using AssetManagerBackend.DTOs;
 
 namespace AssetManagerBackend.Controllers
 {
@@ -10,36 +12,47 @@ namespace AssetManagerBackend.Controllers
     [Authorize]
     public class AssetManagementsController : ControllerBase
     {
-        private readonly IRepository<AssetManagement> _repository;
+        private readonly IAssetManagementRepository _repository;
 
-        public AssetManagementsController(IRepository<AssetManagement> repository)
+        public AssetManagementsController(IAssetManagementRepository repository)
         {
             _repository = repository;
         }
 
         [HttpGet]
-        public List<AssetManagement> GetAssetManagements()
+        public List<AssetManagementDTO> GetAssetManagements()
         {
-            return _repository.GetAll().ToList();
+            var assetManagements = _repository.GetAllWithUsersAndAssets().ToList();
+
+            var assetManagementDTOs = assetManagements.Select(am => new AssetManagementDTO
+            {
+                User = $"{am.User.FirstName} {am.User.LastName}",
+                Asset = am.Asset.Name,
+                Id = am.Id,
+                CreatedAt = am.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ss"),
+                CreatedBy = am.CreatedBy
+            }).ToList();
+
+            return assetManagementDTOs;
         }
 
         [HttpGet("count")]
         public int GetAssetManagementCount()
         {
-            return _repository.GetAll().Count();
+            return _repository.GetAllWithUsersAndAssets().Count();
         }
 
         [HttpGet("{id}")]
-        public async Task<AssetManagement?>GetAssetManagement(int id)
+        public async Task<AssetManagement?> GetAssetManagement(int id)
         {
-            return await _repository.GetById(id);
+            return await _repository.GetByIdWithUserAndAsset(id);
         }
 
         [HttpGet("pagination")]
         public IActionResult GetAssetManagements(int pageIndex = 1, int pageSize = 10)
         {
-            var totalAssetsManagement = _repository.GetAll().Count();
-            var assetsManagementPaged = _repository.GetAll()
+            var totalAssetsManagement = _repository.GetAllWithUsersAndAssets().Count();
+            var assetsManagementPaged = _repository.GetAllWithUsersAndAssets()
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
@@ -75,10 +88,10 @@ namespace AssetManagerBackend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAssetManagement(AssetManagement asstMngmnt)
+        public async Task<IActionResult> AddAssetManagement(CreateEditAssetManagementDTO newAsstMngmnt)
         {
-            var res = await _repository.Create(asstMngmnt);
-            if (res == -1)
+            var res = await _repository.CreateWithUserAndAsset(newAsstMngmnt.User, newAsstMngmnt.Asset);
+            if (res == null)
             {
                 return NotFound(new DTO.ActionResponse
                 {
@@ -96,16 +109,16 @@ namespace AssetManagerBackend.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAssetManagement(AssetManagement newAsstMngmnt)
+        public async Task<IActionResult> UpdateAssetManagement(CreateEditAssetManagementDTO editAsstMngmnt)
         {
-            var res = await _repository.Update(newAsstMngmnt.Id, newAsstMngmnt);
-            if (res == -1)
+            var res = await _repository.UpdateWithUserAndAsset(editAsstMngmnt.User, editAsstMngmnt.Asset, editAsstMngmnt.Id);
+            if (res == null)
             {
                 return NotFound(new DTO.ActionResponse
                 {
                     Success = false,
-                    Title = "Link not found",
-                    Message = "There is no link for this id."
+                    Title = "Something went wrong",
+                    Message = "Oops, something went wrong server side. Please try again later."
                 });
             }
             return Ok(new DTO.ActionResponse

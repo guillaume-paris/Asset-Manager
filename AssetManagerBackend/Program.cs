@@ -82,6 +82,7 @@ builder.Services.AddAuthentication(x =>
 
 builder.Services.AddScoped<IUserAccountRepository, UserAccountRepository>();
 builder.Services.AddScoped<IAssetRepository, AssetRepository>();
+builder.Services.AddScoped<IAssetManagementRepository, AssetManagementRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 // Pass expiryDuration to JwtBearerService
 builder.Services.AddScoped<IJwtBearerService, JwtBearerService>(provider =>
