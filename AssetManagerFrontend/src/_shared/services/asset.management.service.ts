@@ -8,6 +8,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IResponse } from '../models/api.model';
 import { Observable, map } from 'rxjs';
 
+import { environment } from '../../env/environment';
+
+const API_URL = environment.apiUrl;
+
 @Injectable()
 export class AssetManagementService {
 
@@ -51,7 +55,7 @@ export class AssetManagementService {
   }
 
   getAssetsManagement(): IGenericTable {
-    const URL: string = "http://localhost:61150/api/AssetManagements";
+    const URL = `${API_URL}/AssetManagements`;
     const assetsManagement: IGenericTableRow[] = [];
 
     this.http.get<Array<IAssetManagement>>(URL).subscribe((data: Array<IAssetManagement>) => {
@@ -68,13 +72,13 @@ export class AssetManagementService {
   }
 
   getAssetManagementCount(): Observable<number> {
-    const URL: string = "http://localhost:61150/api/AssetManagements/count";
+    const URL = `${API_URL}/AssetManagements/count`;
 
     return this.http.get<number>(URL);
   }
 
   getAssetsManagementPagination(pageIndex: number, pageSize: number): Observable<{totalAssetsManagement: number, assetsManagement: IGenericTable}> {
-    const URL: string = "http://localhost:61150/api/AssetManagements/pagination?pageIndex=" + pageIndex.toString() + "&pageSize=" + pageSize.toString();
+    const URL = `${API_URL}/AssetManagements/pagination?pageIndex=` + pageIndex.toString() + "&pageSize=" + pageSize.toString();
     const assetsManagement: IGenericTable = this.assetsManagement;
     const listAssetManagement: IGenericTableRow[] = [];
 
@@ -93,7 +97,7 @@ export class AssetManagementService {
   }
   
   createAssetManagement(newAssetManagement: IGenericTableRow): Observable<IResponse> {
-    const URL: string = "http://localhost:61150/api/AssetManagements";
+    const URL = `${API_URL}/AssetManagements`;
     const body = JSON.stringify({
       id: 1,
       user: newAssetManagement.values[0],
@@ -105,7 +109,7 @@ export class AssetManagementService {
   }
 
   updateAssetManagement(id: number, newAssetManagement: IGenericTableRow): Observable<IResponse> {
-    const URL: string = "http://localhost:61150/api/AssetManagements/" + id.toString();
+    const URL = `${API_URL}/AssetManagements/` + id.toString();
     const body = JSON.stringify({ 
       user: newAssetManagement.values[0],
       asset: newAssetManagement.values[1],
@@ -117,7 +121,7 @@ export class AssetManagementService {
   }
 
   deleteAssetManagement(id: number): Observable<IResponse> {
-    const URL: string = "http://localhost:61150/api/AssetManagements/" + id.toString();
+    const URL = `${API_URL}/AssetManagements/` + id.toString();
 
     return this.http.delete<IResponse>(URL);
   }

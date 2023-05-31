@@ -6,6 +6,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { IResponse } from '../models/api.model';
 
+import { environment } from '../../env/environment';
+
+const API_URL = environment.apiUrl;
+
 @Injectable()
 export class UserService {
 
@@ -18,7 +22,7 @@ export class UserService {
   }
 
   getUsers(): IGenericTable {
-    const URL: string = "http://localhost:61150/api/Users";
+    const URL = `${API_URL}/Users`;
     const users: IGenericTableRow[] = [];
 
     this.http.get<Array<IUser>>(URL).subscribe((data: Array<IUser>) => {
@@ -35,18 +39,18 @@ export class UserService {
   }
 
   getUsersTest(): Observable<IGenericTable> {
-    const URL: string = "http://localhost:61150/api/Users";
+    const URL = `${API_URL}/Users`;
     return this.http.get<IGenericTable>(URL);
   }
 
   getUserCount(): Observable<number> {
-    const URL: string = "http://localhost:61150/api/Users/count";
+    const URL = `${API_URL}/Users/count`;
 
     return this.http.get<number>(URL);
   }
 
   getUsersPagination(pageIndex: number, pageSize: number): Observable<{totalUsers: number, users: IGenericTable}> {
-    const URL: string = "http://localhost:61150/api/Users/pagination?pageIndex=" + pageIndex.toString() + "&pageSize=" + pageSize.toString();
+    const URL = `${API_URL}/Users/pagination?pageIndex=` + pageIndex.toString() + "&pageSize=" + pageSize.toString();
     const users: IGenericTable = this.users;
     const listUser: IGenericTableRow[] = [];
     
@@ -65,7 +69,7 @@ export class UserService {
   }
 
   createUser(newUser: IGenericTableRow): Observable<IResponse> {
-    const URL: string = "http://localhost:61150/api/Users";
+    const URL = `${API_URL}/Users`;
     const body = JSON.stringify({
       id: 0,
       firstName: newUser.values[0],
@@ -79,7 +83,7 @@ export class UserService {
   }
 
   updateUser(id: number, updatedUser: IGenericTableRow): Observable<IResponse> {
-    const URL: string = "http://localhost:61150/api/Users/" + id.toString();
+    const URL = `${API_URL}/Users/` + id.toString();
     const body = JSON.stringify({ 
       firstName: updatedUser.values[0],
       lastName: updatedUser.values[1],
@@ -93,7 +97,7 @@ export class UserService {
   }
 
   deleteUser(id: number): Observable<IResponse> {
-    const URL: string = "http://localhost:61150/api/Users/" + id.toString();
+    const URL = `${API_URL}/Users/` + id.toString();
 
     return this.http.delete<IResponse>(URL);
   }

@@ -7,6 +7,10 @@ import { ILogin, IRegister } from '../models/auth.model';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 
+import { environment } from '../../env/environment';
+
+const API_URL = environment.apiUrl;
+
 @Injectable({
   providedIn: 'root',
 })
@@ -43,7 +47,7 @@ export class AuthService {
     if (this.isRouteAuthenticated()) {
       return of({ success: false, title: "An error occured", message: "You are already connected", username: "", token: "", expiresIn: 0 });
     }
-    const URL: string = "http://localhost:61150/api/UserAccounts/login";
+    const URL = `${API_URL}/UserAccounts/login`;
     const body = JSON.stringify({
       Username: usernameEmail,
       Email: usernameEmail,

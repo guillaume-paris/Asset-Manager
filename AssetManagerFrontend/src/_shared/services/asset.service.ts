@@ -6,6 +6,10 @@ import { Observable, map } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IAsset, IAssetResult } from '../models/asset.model';
 
+import { environment } from '../../env/environment';
+
+const API_URL = environment.apiUrl;
+
 @Injectable()
 export class AssetService {
 
@@ -17,7 +21,7 @@ export class AssetService {
   }
 
   getAssets(): IGenericTable {
-    const URL: string = "http://localhost:61150/api/Assets";
+    const URL = `${API_URL}/Assets`;
     const assets: IGenericTableRow[] = [];
 
     this.http.get<Array<IAsset>>(URL).subscribe((data: Array<IAsset>) => {
@@ -34,13 +38,13 @@ export class AssetService {
   }
 
   getAssetCount(): Observable<number> {
-    const URL: string = "http://localhost:61150/api/Assets/count";
+    const URL = `${API_URL}/Assets/count`;
 
     return this.http.get<number>(URL);
   }
 
   getAssetsPagination(pageIndex: number, pageSize: number): Observable<{totalAssets: number, assets: IGenericTable}> {
-    const URL: string = "http://localhost:61150/api/Assets/pagination?pageIndex=" + pageIndex.toString() + "&pageSize=" + pageSize.toString();
+    const URL = `${API_URL}/Assets/pagination?pageIndex=` + pageIndex.toString() + "&pageSize=" + pageSize.toString();
     const assets: IGenericTable = this.assets;
     const listAsset: IGenericTableRow[] = [];
 
@@ -59,18 +63,18 @@ export class AssetService {
   }
 
   getFreeAssets(): Observable<{freeAssets: Array<IAsset>}> {
-    const URL: string = "http://localhost:61150/api/Assets/free";
+    const URL = `${API_URL}/Assets/free`;
     return this.http.get<{freeAssets: Array<IAsset>}>(URL);
   }
 
   getFreeAssetCount(): Observable<number> {
-    const URL: string = "http://localhost:61150/api/Assets/free/count";
+    const URL = `${API_URL}/Assets/free/count`;
 
     return this.http.get<number>(URL);
   }
   
   createAsset(newAsset: IGenericTableRow): Observable<IResponse> {
-    const URL: string = "http://localhost:61150/api/Assets";
+    const URL = `${API_URL}/Assets`;
     const body = JSON.stringify({ 
       id: 1,
       name: newAsset.values[0],
@@ -85,7 +89,7 @@ export class AssetService {
   }
 
   updateAsset(id: number, updatedAsset: IGenericTableRow): Observable<IResponse> {
-    const URL: string = "http://localhost:61150/api/Assets/" + id.toString();
+    const URL = `${API_URL}/Assets/` + id.toString();
     const body = JSON.stringify({ 
       name: updatedAsset.values[0],
       description: updatedAsset.values[1],
@@ -100,7 +104,7 @@ export class AssetService {
   }
 
   deleteAsset(id: number): Observable<IResponse> {
-    const URL: string = "http://localhost:61150/api/Assets/" + id.toString();
+    const URL = `${API_URL}/Assets/` + id.toString();
 
     return this.http.delete<IResponse>(URL);
   }
